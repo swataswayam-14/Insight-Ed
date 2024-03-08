@@ -1,0 +1,5 @@
+## platform details
+
+### Insight Ed is a web-based platform that facilitates online learning by empowering teachers and students with the following functionalities:
+
+#### Account Creation: Both teachers and students can create accounts to access the platform. Course Management: Teachers can create and manage courses, making them readily accessible to their students. Live Video Lectures: Teachers can schedule and conduct live video lectures using Zoom or Google Meet, seamlessly integrating them into the platform. Automatic Recording and Sharing: The entire live lecture is automatically recorded and uploaded to a secure cloud storage (e.g., Google Drive), generating a sharable link. Lecture Analysis: Teachers can post the sharable video link in the platform's lecture analysis section. This section utilizes a machine learning model to analyze student facial gestures and emotions, identifying areas of difficulty during the lecture. Review Guidance: Based on the analysis, the platform generates insights into topics that students might need to review. It additionally provides links to relevant YouTube videos for targeted self-study and reinforcement.
