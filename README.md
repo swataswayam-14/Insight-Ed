@@ -3,17 +3,16 @@
 
 Our product (**website**) provides a solution to tackle the challenge of distance learning between student and teacher, especially in the pandemic era where offline learning was a thing of the past.
 
-Our solution trie to bridge the knowledge gap between teacher and a student in online classes by leveraging the power of AI to provide the teacher and stduent with isoghts to better prepare themselves for the course/lecture, leading to our solution - *Insight-Ed*.
+Our solution tries to bridge the knowledge gap between a teacher and a student in online classes by leveraging the power of AI to provide the teacher and student with insights to better prepare themselves for the course/lecture, leading to our solution - *Insight-Ed*.
 
-![Logo](https://firebasestorage.googleapis.com/v0/b/fashionx-ebe6c.appspot.com/o/temp%2Flogo_1.png?alt=media&token=13098b57-3f6a-4dc3-9d1e-2bd35613b814)
-
+![logo](https://github.com/YuvrajSingh-mist/Insight-Ed/assets/141050962/23380baa-22ab-4b41-aabd-b146dd370478)
 
 
 ## Tech Stack
 
 **Client:** HTML, React.js
 
-**Backend:** Flask, Python , Keras, GeminiPro-SDK, HuggingFace API (EmotionLLM)
+**Backend:** Flask, Python, Keras, GeminiPro-SDK, HuggingFace API (EmotionLLM)
 
 **Storage:** MongoDB, ChromaDB
 
