@@ -1,5 +1,121 @@
-## platform details
+# Insight-Ed
 
-### Insight Ed is a web-based platform that facilitates online learning by empowering teachers and students with the following functionalities:
 
-#### Account Creation: Both teachers and students can create accounts to access the platform. Course Management: Teachers can create and manage courses, making them readily accessible to their students. Live Video Lectures: Teachers can schedule and conduct live video lectures using Zoom or Google Meet, seamlessly integrating them into the platform. Automatic Recording and Sharing: The entire live lecture is automatically recorded and uploaded to a secure cloud storage (e.g., Google Drive), generating a sharable link. Lecture Analysis: Teachers can post the sharable video link in the platform's lecture analysis section. This section utilizes a machine learning model to analyze student facial gestures and emotions, identifying areas of difficulty during the lecture. Review Guidance: Based on the analysis, the platform generates insights into topics that students might need to review. It additionally provides links to relevant YouTube videos for targeted self-study and reinforcement.
+Our product (**website**) provides a solution to tackle the challenge of distance learning between student and teacher, especially in the pandemic era where offline learning was a thing of the past.
+
+Our solution trie to bridge the knowledge gap between teacher and a student in online classes by leveraging the power of AI to provide the teacher and stduent with isoghts to better prepare themselves for the course/lecture, leading to our solution - *Insight-Ed*.
+
+![Logo](https://firebasestorage.googleapis.com/v0/b/fashionx-ebe6c.appspot.com/o/temp%2Flogo_1.png?alt=media&token=13098b57-3f6a-4dc3-9d1e-2bd35613b814)
+
+
+
+## Tech Stack
+
+**Client:** HTML, React.js
+
+**Backend:** Flask, Python , Keras, GeminiPro-SDK, HuggingFace API (EmotionLLM)
+
+**Storage:** MongoDB, ChromaDB
+
+**Other Tools:** GCP APIs, Docker
+
+## Features
+
+1. **Detection of Emotion and Attentiveness of a Student**
+
+Used Transfer Learning on EfficientNetB7 model alongwith a custom dataset combined with an open-sourced LLMs to capture the same through the recorded lecture which the student attended through the web cam during that session.
+
+2. **Topic Modelling for Each Segment where student lost attention**
+
+-> Through the power of Gemini-Pro SDK and OpenAI Whisper module, each of the segments where loss of interest is detected is transcribe into text and most relavant keywords(Topic Modelling) is done to bring out the topics where students needs clarification.
+
+
+
+
+
+## Requirements
+
+
+Please install the following requirements before proceeding with the next steps
+#### Server
+
+```bash
+Docker
+```
+
+
+## Run Locally
+
+
+
+### Server
+
+Pull the server image from DockerHub
+
+```bash
+  docker pull yuvrajsingh9886/plogpayouts-server:v1.0
+```
+
+Run the server image
+
+```bash
+  docker container run -d -p 8080:8080 yuvrajsingh9886/plogpayouts-server:v1.0
+```
+
+### Website
+
+Clone the project
+
+```bash
+  git clone https://github.com/swataswayam-14/Insight-Ed
+```
+
+Go to the project directory
+
+```bash
+  cd Insight-Ed
+```
+Create an enviroment variable 'GOOGLE_API_KEY' in the .env file for gemini-pro to work
+
+```bash
+  GOOGLE_API_KEY=<YOUR_API_KEY>
+```
+
+
+Create a virtual environment
+
+```bash
+  mkvirtualenv envname
+```
+
+Activate virtualenv
+
+```bash
+  workon envname
+```
+
+Install dependencies
+
+```bash
+  pip install -r requirements.txt
+```
+
+Run the website Locally
+
+```bash
+  python manage.py runserver
+```
+
+
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)
+
+
+## Authors
+
+
+- [@Swata Swayam Dash](https://github.com/swataswayam-14)
+- [@YuvrajSingh](https://github.com/YuvrajSingh-mist)
+
+
