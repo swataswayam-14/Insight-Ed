@@ -22,12 +22,25 @@ Our solution tries to bridge the knowledge gap between a teacher and a student i
 
 1. **Detection of Emotion and Attentiveness of a Student**
 
-Used Transfer Learning on EfficientNetB7 model alongwith a custom dataset combined with an open-sourced LLMs to capture the same through the recorded lecture which the student attended through the web cam during that session.
+Used Transfer Learning on EfficientNetB7 model along with a custom dataset combined with an open-sourced LLMs to capture the same through the recorded lecture which the student attended through the webcam during that session.
 
-2. **Topic Modelling for Each Segment where student lost attention**
+2. **Topic Modelling for Each Segment where Student lost attention**
 
--> Through the power of Gemini-Pro SDK and OpenAI Whisper module, each of the segments where loss of interest is detected is transcribe into text and most relavant keywords(Topic Modelling) is done to bring out the topics where students needs clarification.
+-> Through the power of Gemini-Pro SDK and OpenAI Whisper module, each of the segments where the loss of interest is detected is transcribed into text and the most relevant keywords(Topic Modelling) are done to bring out the topics where students need clarification.
+-> The teacher is thus present with an analysis as to when did student lost his/her attention and on which topic(s) through the video lecture
 
+3. **Automatic Video Time-stamping into Different Topics- Saving Teacher's Time**
+
+-> This feature allows automatic time stamping of videos depending on a hyperparameter chosen by the teacher exclusively.
+
+4. **Reverse Video Search**
+
+-> This feature allows the student to not get through the video again and again for a particular keyword but rather type it and get the exact timestamp(s) for the same.
+
+5. **Generation of Questionnaire on topics where students lacked attention**
+
+-> This feature allows the teacher to generate/upload a questionnaire through an LLM for the topics for the student to double-check his/her understanding to plan further steps.
+-> The student can also get recommended most relevant YouTube videos on the same or the teacher could suggest some materials or videos from their course itself.
 
 
 
