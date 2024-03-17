@@ -3,17 +3,16 @@
 
 Our product (**website**) provides a solution to tackle the challenge of distance learning between student and teacher, especially in the pandemic era where offline learning was a thing of the past.
 
-Our solution trie to bridge the knowledge gap between teacher and a student in online classes by leveraging the power of AI to provide the teacher and stduent with isoghts to better prepare themselves for the course/lecture, leading to our solution - *Insight-Ed*.
+Our solution tries to bridge the knowledge gap between a teacher and a student in online classes by leveraging the power of AI to provide the teacher and student with insights to better prepare themselves for the course/lecture, leading to our solution - *Insight-Ed*.
 
-![Logo](https://firebasestorage.googleapis.com/v0/b/fashionx-ebe6c.appspot.com/o/temp%2Flogo_1.png?alt=media&token=13098b57-3f6a-4dc3-9d1e-2bd35613b814)
-
+![logo](https://github.com/YuvrajSingh-mist/Insight-Ed/assets/141050962/23380baa-22ab-4b41-aabd-b146dd370478)
 
 
 ## Tech Stack
 
 **Client:** HTML, React.js
 
-**Backend:** Flask, Python , Keras, GeminiPro-SDK, HuggingFace API (EmotionLLM)
+**Backend:** Flask, Python, Keras, GeminiPro-SDK, HuggingFace API (EmotionLLM)
 
 **Storage:** MongoDB, ChromaDB
 
@@ -23,12 +22,25 @@ Our solution trie to bridge the knowledge gap between teacher and a student in o
 
 1. **Detection of Emotion and Attentiveness of a Student**
 
-Used Transfer Learning on EfficientNetB7 model alongwith a custom dataset combined with an open-sourced LLMs to capture the same through the recorded lecture which the student attended through the web cam during that session.
+Used Transfer Learning on EfficientNetB7 model along with a custom dataset combined with an open-sourced LLMs to capture the same through the recorded lecture which the student attended through the webcam during that session.
 
-2. **Topic Modelling for Each Segment where student lost attention**
+2. **Topic Modelling for Each Segment where Student lost attention**
 
--> Through the power of Gemini-Pro SDK and OpenAI Whisper module, each of the segments where loss of interest is detected is transcribe into text and most relavant keywords(Topic Modelling) is done to bring out the topics where students needs clarification.
+-> Through the power of Gemini-Pro SDK and OpenAI Whisper module, each of the segments where the loss of interest is detected is transcribed into text and the most relevant keywords(Topic Modelling) are done to bring out the topics where students need clarification.
+-> The teacher is thus present with an analysis as to when did student lost his/her attention and on which topic(s) through the video lecture
 
+3. **Automatic Video Time-stamping into Different Topics- Saving Teacher's Time**
+
+-> This feature allows automatic time stamping of videos depending on a hyperparameter chosen by the teacher exclusively.
+
+4. **Reverse Video Search**
+
+-> This feature allows the student to not get through the video again and again for a particular keyword but rather type it and get the exact timestamp(s) for the same.
+
+5. **Generation of Questionnaire on topics where students lacked attention**
+
+-> This feature allows the teacher to generate/upload a questionnaire through an LLM for the topics for the student to double-check his/her understanding to plan further steps.
+-> The student can also get recommended most relevant YouTube videos on the same or the teacher could suggest some materials or videos from their course itself.
 
 
 
@@ -53,13 +65,13 @@ Docker
 Pull the server image from DockerHub
 
 ```bash
-  docker pull yuvrajsingh9886/plogpayouts-server:v1.0
+  docker pull  yuvrajsingh9886/insight-ed-flask-server:v1.0
 ```
 
 Run the server image
 
 ```bash
-  docker container run -d -p 8080:8080 yuvrajsingh9886/plogpayouts-server:v1.0
+  docker container run -d -p 8080:8080  yuvrajsingh9886/insight-ed-flask-server:v1.0
 ```
 
 ### Website
