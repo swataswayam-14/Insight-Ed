@@ -329,7 +329,7 @@ def speechRecognition():
     keywords_dict = {}
     text_data.append(text['text'])
     
-    # openai.api_key = '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'
+   
 
     # URL = "https://api.openai.com/v1/chat/completions"
     # prompt_template = "give me just the three to five most relevant (descending order of importance)  topics centered around the provided text. Remember, ONLY 3 to 5 topics and just the topics' names and nothing else in the output"
