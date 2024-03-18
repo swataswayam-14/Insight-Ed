@@ -1,0 +1,189 @@
+teacher --> signup --> account creation:
+
+schema: 
+model teacher{
+	id:
+	name:
+	email:
+	phoneno:
+	address:
+}
+teacher profile --> it will show the teacher's details: name and email. Number of student enrolled , number of subjects launched , total number of lectures taken.
+
+teacher will have 2 options : 1.Add a subject (new course) 2.Analyse For a Subject
+
+Add a new Subject --> 
+
+schema for subject:
+
+model subject{
+	id:
+	teacher id: (ref teacher's id)
+	title:
+	description:
+}
+
+Teacher will navigate to subject section after creating a subject , which will show the teacher how many subjects he/she has created in the form:
+
+1.subject1 (title, description) and a button [add lectures]
+2.subject2 (title, description) and a button [add lectures]
+3.subject3 (title, description) and a button [add lectures]
+etc...
+
+when the teacher clicks on [add lectures]
+
+schema for lecture:
+
+model lecture{
+	id:
+	subid: ref(subject's id)
+	teachid: ref(teacher's id)
+	lecture link: (google drive link of the recorded lecture)
+}
+
+Once the teacher has created the lecture , he/she will navigate to another page which will show all the students in the form :
+
+in the side of each student there would be a button (analyse)
+
+1.student1 (name , email) [analyse]
+2.student2 (name , email) [analyse]
+3.student3 (name , email) [analyse]
+etc....
+
+when the teacher clicks on the analyse button of a particular student:
+ response = api call to ML model (inputs : lecture link (google drive))
+
+in the response , I am expecting:
+1.Keywords (in the form of string) 
+ex: "deeplearning , opencv, react concepts , kajdf, adh,  etc...."
+(words separated by a comma)
+
+2.Youtube Links (in the form of string) 
+ex: "ddsfsfaada , oasdpsdas, rasadctadsaoncepts , kajdf, adh,  etc...."
+(words separated by a comma)
+
+after getting the data from the ML model, the WeakConcept database is created for that particular student:
+
+schema for the WeakConcept:
+
+model WeakConcept{
+	id:
+	studid: ref(student's id)
+	lectureid: ref(lecture's id)
+	teacherid: ref(teacher's id)
+	keywords:
+	youtubeLinks:
+}
+
+After the teacher has clicked on the analyse button , after the analysis is done, data stored etc, now the teacher will navigate to another page (Analysis result)
+
+It will show all the keywords (topics) in which the student might have faced difficulty, and there would be a button [generate personalised questions] at the bottom of the page.
+
+when the teacher clicks on the button:
+
+response = (api call to ML model (inputs = keywords))
+
+the ML model will generate questions based on the keywords
+
+in the response I am expecting all the questions given as a string , each question separated by a comma
+
+example: "what is cv?, what is ML, what is the use of useEffect , etc...."
+
+after getting the response 
+
+a database Questions would be created
+
+model Questions{
+	id:
+	lectureid: ref(lecture's id)
+	studid: ref(student's id)
+	teacherid: ref(teacher's id)
+	questions:
+}
+
+then , a mail will be sent to student , sending all the questions as homework
+
+-------------------------------------------------------------------------------------
+
+Student --> signup --> account creation
+
+schema for student's profile:
+
+model Student{
+	id:
+	name:
+	email:
+	password:
+}
+
+after signing up the stundent will navigate to dashboard page, which will show two sections:
+
+i)your registered courses:		Button
+	1.course1 (title , description) [view lectures]
+	2.course2 (title , description)	[view lectures]
+	3.course3 (title , description)	[view lectures]
+	etc...
+ii) Register for course:
+	inputs: 
+	enter courseId: 
+
+DESCRIBING THE 1st (your registered courses section)
+
+when the student clicks on the view lecture button then he/she will navigate to another page showing all the lectures of that particular course in the form:
+
+1.lecture1 [see analysis]
+2.lecture2 [see analysis]
+3.lecture3 [see analysis]
+4.lecture4 [see analysis]
+etc....
+
+when the student clicks on the see analysis button then he/she will navigate to analysis section, there it will show:
+
+SUGGESTED YOUTUBE LINKS:
+
+1.link1
+2.link2
+3.link3
+etc...
+ 
+PRACTISE QUESTIONS:
+
+1.question1	
+2.question2
+3.question3	
+etc...
+
+
+and a button [Mark as Done]
+
+when the student clicks on the mark as done button then request goes to the teacher in the mail , if the teacher approves then database call happen for WeakConcepts and Questions for that particular student , and the datas are deleted
+
+
+
+DESCRIBING THE 2nd (Register for course):
+
+when the student gives the course id as input, then a Registered Courses is created
+schema for Register Courses is :
+
+model RegisteredCourses{
+	id:
+	subid: ref(subject's id)
+}
+
+---------------------------------------------------------------------------------------------------------------
+
+Some recent changes-
+
+Endpoint - (speechAndKeywordsEmotionDrwosiniess) - This has changed. Now this will return the exact timestamps alongwith the students emotional state and drowsiness state at the point. (TEACHER'S SIDE)
+
+Endpoint - (speechAndKeywordsIndividualParts) - This will enable the student to get keywords of those segments of the video lecture they want a glimpse of. It will return keywords for those timestamps given in the query.
+
+Endpoint - (speechAndKeywordsFullOneShot) -  This is for the TEACHER'S SIDE). This will help the teacher to generate timestamps with appropriate keywords automatically for the student for a particular video lecture.(Like we have on YT)
+
+Endpoint - (searchWitihinVideo) This will be on the STUDENT'S SIDE. This will enable the student to do a reverse video search, that is, search for a particular keyword/topic within the video itself and get the appropriate/nearest timestamps for the same.	This will return a json object consisting of timestamps (one or more best matched) for the query.
+
+Endpoint - (generateQuestionnaire) - This will generate a questionnaire based on the whole video or certain segment (if it has enough content) of 10 MCQ's. It will return the same.
+
+--------------------------------------------------------------------------------------------------------------
+
+
