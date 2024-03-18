@@ -1,0 +1,101 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+model Teacher{
+  id String @id @default(uuid())
+  username String 
+  email String @unique
+  firstname String
+  lastname String
+  password String
+  phoneno String
+  address String
+  createdAt DateTime @default(now())
+  subject Subject[]
+  lecture Lecture[]
+  studentteacher Studentteacher[]
+}
+
+model Subject{
+  id String @id @default(uuid())
+  teacherid String
+  title String
+  description String
+  createdAt DateTime @default(now())
+  teacher Teacher @relation(fields: [teacherid], references: [id])
+  lecture Lecture[]
+  studentsubject Studentsubject[]
+}
+
+model Lecture{
+  id String @id @default(uuid())
+  subjectid String
+  teacherid String
+  title String
+  link String
+  subject Subject @relation(fields: [subjectid], references: [id])
+  teacher Teacher @relation(fields: [teacherid],references: [id])
+  weakconcept WeakConcept[]
+  questions Questions[]
+}
+
+model Student{
+  id String @id @default(uuid())
+  username String
+  email String @unique
+  firstname String
+  lastname String
+  phoneno String
+  address String
+  studentteacher Studentteacher[]
+  studentsubject Studentsubject[]
+  weakconcept WeakConcept[]
+  questions Questions[]
+}
+model Studentteacher{
+  id String @id @default(uuid())
+  studentid String
+  teacherid String
+  student Student @relation(fields: [studentid], references: [id])
+  teacher Teacher @relation(fields: [teacherid], references: [id])
+}
+
+model Studentsubject{
+  id String @id @default(uuid())
+  studentid String
+  subjectid String
+  student Student @relation(fields: [studentid], references: [id])
+  subject Subject @relation(fields: [subjectid], references: [id])
+}
+
+model WeakConcept{
+  id String @id @default(uuid())
+  lectureid String
+  studentid String
+  keywords String
+  youtubelinks String
+  lecture Lecture @relation(fields: [lectureid], references: [id])
+  student Student @relation(fields: [studentid], references: [id])
+}
+
+model Questions{
+  id String @id @default(uuid())
+  lectureid String
+  studentid String
+  questions String
+  lecture Lecture @relation(fields: [lectureid], references: [id])
+  student Student @relation(fields: [studentid], references: [id])
+}
