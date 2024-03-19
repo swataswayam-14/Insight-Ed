@@ -56,6 +56,7 @@ model Student{
   id String @id @default(uuid())
   username String
   email String @unique
+  password String
   firstname String
   lastname String
   phoneno String
