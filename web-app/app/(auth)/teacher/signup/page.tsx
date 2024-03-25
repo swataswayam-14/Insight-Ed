@@ -1,5 +1,5 @@
-import SignUp from "@/app/components/SignUp";
+import TeacherSignUpComponent from "@/app/components/SignUp"
 
 export default function TeacherSignUp(){
-    return <SignUp/>
+    return <TeacherSignUpComponent/>
 }
