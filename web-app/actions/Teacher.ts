@@ -1,7 +1,6 @@
 "use server"
 
-import { PrismaClient } from "@prisma/client";
-const client = new PrismaClient();
+import client from "@/db"
 export async function TeacherSignup(username:string, firstname:string, lastname:string, password:string, phoneno:string, address:string, email:string){
     try {
         const teacher = await client.teacher.create({

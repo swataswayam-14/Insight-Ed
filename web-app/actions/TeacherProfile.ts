@@ -1,8 +1,6 @@
 "use server"
 
-import { PrismaClient} from "@prisma/client"
-
-const client = new PrismaClient()
+import client from "@/db"
 
 
 export async function TeacherProfile(teacherId:string, teacherEmail:string) {
