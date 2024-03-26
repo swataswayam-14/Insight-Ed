@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { addLecture } from '@/actions/TeacherProfile';
 import { useRouter } from 'next/router';
 
@@ -11,7 +11,7 @@ const AddLectureComponent: React.FC = () => {
     const [title , setTitle] = useState("");
     const [link, setLink] = useState("");
     const [teacherId, setTeacherId] = useState("");
-     const { id }:any = router.query;
+    const { id }:any = router.query;
 
 
     const addLectureDetails = async ()=>{

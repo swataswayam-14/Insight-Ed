@@ -41,3 +41,21 @@ export async function StudentSignin(email:string, password:string) {
         
     }
 }
+
+export async function getStudentDetails(id:string) {
+    try {
+        const student = await client.student.findUnique({
+            where:{
+                id:id
+            }
+        });
+        if(student){
+            const username = student.username;
+            const email = student.email;
+
+            return {username, email};
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
