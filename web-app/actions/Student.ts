@@ -59,3 +59,33 @@ export async function getStudentDetails(id:string) {
         console.log(error);
     }
 }
+
+export async function RegisterCourse(subjectId:string, studentemail:string) {
+    console.log('hit');
+    
+    try {
+        const student = await client.student.findUnique({
+            where:{
+                email:studentemail
+            }
+        })
+        console.log(student);
+        
+        if(student){
+            const studentid = student.id;
+            const register = await client.studentsubject.create({
+                data:{
+                    studentid:studentid,
+                    subjectid:subjectId
+                }
+            })
+            if(register){
+                console.log('Registration id ' + register.id);
+                
+            }
+        }
+    } catch (error) {
+        console.log(error);
+        
+    }
+}
