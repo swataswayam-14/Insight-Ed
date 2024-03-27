@@ -26,7 +26,7 @@ const Subjects = () => {
   return (
     <div>
       {subjects.map((subject) => (
-        <Subject key={subject.id} title={subject.title} description={subject.description} subjectid={subject.id} />
+        <Subject key={subject.id} title={subject.title} description={subject.description} subjectid={subject.id} isStudent={false} />
       ))}
     </div>
   );

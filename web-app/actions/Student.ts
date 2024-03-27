@@ -52,8 +52,9 @@ export async function getStudentDetails(id:string) {
         if(student){
             const username = student.username;
             const email = student.email;
+            const id = student.id;
 
-            return {username, email};
+            return {username, email, id};
         }
     } catch (error) {
         console.log(error);
@@ -88,4 +89,19 @@ export async function RegisterCourse(subjectId:string, studentemail:string) {
         console.log(error);
         
     }
+}
+
+export async function YourCourses(studentid:string) {
+    const studentSubject = await client.studentsubject.findMany({
+        where:{
+            studentid:studentid
+        },
+        select:{
+            subject:true
+        }
+    });
+
+    const subjects = studentSubject.map((e)=> e.subject);
+
+    return subjects;
 }
