@@ -20,7 +20,7 @@ const Subject: React.FC<SubjectProps> = ({ title, description, subjectid, isStud
         <p className="text-lg text-gray-600 mb-4">{description}</p>
         {!isStudent && (
         <button className="bg-blue-500 text-white px-4 py-2 rounded-md border border-blue-500">
-          <Link href={`/profile/teacher/addlecture/${subjectid}`}>Add Lecture</Link>
+          <Link href={`/profile/teacher/${subjectid}`}>Add Lecture</Link>
         </button>
         )}
       </div>
