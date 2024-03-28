@@ -1,12 +1,13 @@
 "use client"
 import React, { useEffect, useState } from 'react';
 import { TeacherProfile, TotalLectures, TotalStudents, TotalSubject } from '@/actions/TeacherProfile';
-
+import { useRouter } from 'next/navigation';
 const TeacherProfileComponent: React.FC = () => {
     const [teacherInfo, setTeacherInfo] = useState<{ username: string, email: string } | undefined>(undefined);
     const [totalStudents , setTotalStudents] = useState([]);
     const [totalSubject , setTotalSubject] = useState([]);
     const [totalLecture , setTotalLecture] = useState([]);
+    const Router = useRouter();
 
     useEffect(() => {
         const fetchTeacherInfo = async () => {
@@ -49,22 +50,24 @@ const TeacherProfileComponent: React.FC = () => {
     },[])
 
     return (
-        <div>
-            {teacherInfo ? (
-                <div>
-                    <h2>Username: {teacherInfo.username}</h2>
-                    <p>Email: {teacherInfo.email}</p>
-                    <p>Total Students Enrolled: {totalStudents.length}</p>
-                    <p>Total Subjects launched: {totalSubject.length}</p>
-                    <p>Total Lectures Taken: {totalLecture.length}</p>
-                </div>
-            ) : (
-                <p>Loading teacher info...</p>
-            )}
-            <button onClick={()=>{
-
+        <div className="bg-gray-100 p-4 rounded-lg shadow-md text-center max-w-md mx-auto mt-40">
+        {teacherInfo ? (
+            <div>
+                <h2 className="text-2xl font-bold text-gray-800 mb-2">Username: {teacherInfo.username}</h2>
+                <p className="text-lg text-gray-600">Email: {teacherInfo.email}</p>
+                <p className="text-lg text-gray-600">Total Students Enrolled: {totalStudents.length}</p>
+                <p className="text-lg text-gray-600">Total Subjects Launched: {totalSubject.length}</p>
+                <p className="text-lg text-gray-600">Total Lectures Taken: {totalLecture.length}</p>
+            </div>
+        ) : (
+            <p className="text-lg text-gray-600">Loading teacher info...</p>
+        )}
+            <button className="bg-blue-500 hover:text-lg hover:bg-blue-600 text-white px-4 py-2 rounded-md mt-4 mr-2" onClick={() => {
+                Router.push('/profile/teacher/addsubject');
             }}>Add Subject</button>
-            <button>Analyse For a subject</button>
+            <button className="bg-green-500 hover:text-lg hover:bg-green-600 text-white px-4 py-2 rounded-md mt-4" onClick={() => {
+            // Analyse For a subject functionality
+            }}>Analyse For a Subject</button>
         </div>
     );
 }

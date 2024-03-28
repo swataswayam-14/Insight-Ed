@@ -1,17 +1,17 @@
 "use client"
-
+import { usePathname } from 'next/navigation'
 import React, { useState } from 'react';
 import { addLecture } from '@/actions/TeacherProfile';
 import { useRouter } from 'next/router';
 
 
 const AddLectureComponent: React.FC = () => {
-    const router = useRouter();
+    const pathname = usePathname()
 
     const [title , setTitle] = useState("");
     const [link, setLink] = useState("");
     const [teacherId, setTeacherId] = useState("");
-    const { id }:any = router.query;
+    const { id }:any = pathname
 
 
     const addLectureDetails = async ()=>{

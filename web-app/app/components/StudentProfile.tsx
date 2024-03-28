@@ -27,22 +27,22 @@ const StudentProfileComponent: React.FC = () => {
     }, []);
 
     return (
-        <div>
-            {studentInfo ? (
-                <div>
-                    <h2>Username: {studentInfo.username}</h2>
-                    <p>Email: {studentInfo.email}</p>
-                </div>
-            ) : (
-                <p>Loading student info...</p>
-            )}
-            <button className='bg-white text-black p-4 border-emerald-300 border-2' onClick={()=>{
-                router.push(`/profile/student/yourcourses/${id}`)
-            }}>Your Courses</button>
-            <button className='bg-white text-black p-4 border-emerald-300 border-2' onClick={()=>{
-                router.push('/profile/student/register')
-            }}>Register for a Course</button>
-        </div>
+        <div className="bg-gray-100 p-4 rounded-lg shadow-md text-center max-w-md mx-auto mt-40">
+        {studentInfo ? (
+          <div>
+            <h2 className="text-2xl font-bold text-gray-800 mb-2">Username: {studentInfo.username}</h2>
+            <p className="text-lg text-gray-600">Email: {studentInfo.email}</p>
+          </div>
+        ) : (
+          <p className="text-lg text-gray-600">Loading student info...</p>
+        )}
+        <button className="bg-white hover:text-lg hover:bg-blue-200 text-black p-4 border border-emerald-300 rounded-md mt-4 mr-2" onClick={() => {
+          router.push(`/profile/student/yourcourses/${id}`);
+        }}>Your Courses</button>
+        <button className="bg-white hover:text-lg hover:bg-blue-200 text-black p-4 border border-emerald-300 rounded-md mt-4" onClick={() => {
+          router.push('/profile/student/register');
+        }}>Register for a Course</button>
+      </div>
     );
 }
 
