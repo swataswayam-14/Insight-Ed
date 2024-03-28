@@ -1,16 +1,20 @@
 "use client"
 import React, { useState } from 'react';
 import { addLecture } from '@/actions/TeacherProfile';
+import { useRouter } from 'next/navigation';
 export default function addLectureComponent({params}:any){
+    const Router = useRouter();
     const [title , setTitle] = useState("");
     const [link, setLink] = useState("");
     const [teacherId, setTeacherId] = useState("");
 
     const addLectureDetails = async ()=>{
-      console.log(params.addlecture);
+      //console.log(params.addlecture);
         await addLecture(title, link, teacherId, params.addlecture);
+        Router.push(`/teacherprofile/${teacherId}`);
     }
-    console.log(params.addlecture);
+
+
     
     return <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
     <input
@@ -25,7 +29,7 @@ export default function addLectureComponent({params}:any){
     <input
       className="bg-white text-black border border-gray-300 rounded-md px-4 py-2 mb-4"
       type="text"
-      placeholder="Description"
+      placeholder="Upload Link"
       value={link}
       onChange={(e) => {
         setLink(e.target.value);

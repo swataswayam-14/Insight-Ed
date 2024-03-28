@@ -1,5 +1,6 @@
 "use client"
 import { TeacherSignup } from "@/actions/Teacher";
+import { useRouter } from "next/navigation";
 import { ChangeEventHandler } from "react";
 import { useState } from "react";
 export default function TeacherSignUpComponent() {
@@ -10,6 +11,7 @@ export default function TeacherSignUpComponent() {
     const [phoneno, setphoneno] = useState("");
     const [address, setaddress] = useState("");
     const [username, setusername] = useState("");
+    const Router = useRouter();
     return <div className="h-screen flex justify-center flex-col">
         <div className="flex justify-center">
         <a href="#" className="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 ">
@@ -41,8 +43,9 @@ export default function TeacherSignUpComponent() {
                         <LabelledInput onChange={(e)=>{
                             setaddress(e.target.value);
                         }} label="Address" type={"address"} placeholder="House no 1416, 123456" />
-                        <button onClick={()=>{
-                            TeacherSignup(email, password, username, firstname, lastname, phoneno,address);
+                        <button onClick={async()=>{
+                            const id = await TeacherSignup(email, password, username, firstname, lastname, phoneno,address);
+                            Router.push(`/teacherprofile/${id}`)
                         }} type="button" className="mt-8 w-full text-white bg-gray-800 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2">Sign Up</button>
                     </div>
                 </div>

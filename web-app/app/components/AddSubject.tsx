@@ -2,14 +2,16 @@
 
 import React, { useEffect, useState } from 'react';
 import { addSubject } from '@/actions/TeacherProfile';
-
+import { useRouter } from 'next/navigation';
 const AddSubjectComponent: React.FC = () => {
+    const Router = useRouter();
     const [title , setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [teacherId, setTeacherId] = useState("");
 
     const addSubjectDetails = async ()=>{
         await addSubject(title, description, teacherId);
+        Router.push(`/profile/teacher/allsubject/${teacherId}`);
     }
 
     return (

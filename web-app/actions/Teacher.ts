@@ -16,11 +16,11 @@ export async function TeacherSignup(username:string, firstname:string, lastname:
         })
         if(teacher){
             console.log('Teacher created successfully with id: '+teacher.id);
-            return true
+            return teacher.id
         }
     } catch (error) {
         console.log(error);
-        return false
+        return -1
     }
 }
 

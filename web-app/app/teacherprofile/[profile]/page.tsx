@@ -2,7 +2,9 @@
 import React, { useEffect, useState } from 'react';
 import { TeacherProfile, TotalLectures, TotalStudents, TotalSubject } from '@/actions/TeacherProfile';
 import { useRouter } from 'next/navigation';
-const TeacherProfileComponent: React.FC = () => {
+export default function TeacherProfileComp({params}:any){
+    //console.log(params.profile);
+    
     const [teacherInfo, setTeacherInfo] = useState<{ username: string, email: string, id:string } | undefined>(undefined);
     const [totalStudents , setTotalStudents] = useState([]);
     const [totalSubject , setTotalSubject] = useState([]);
@@ -12,7 +14,7 @@ const TeacherProfileComponent: React.FC = () => {
     useEffect(() => {
         const fetchTeacherInfo = async () => {
             try {
-                const info = await TeacherProfile('874c5bbc-843d-49c6-b736-eea58c381aab');
+                const info = await TeacherProfile(params.profile);
                 if (info) {
                     const { username, email, id } = info;
                     setTeacherInfo({ username, email, id });
@@ -30,15 +32,15 @@ const TeacherProfileComponent: React.FC = () => {
     useEffect(()=>{
         const fetchTotalInfo = async ()=>{
             try {
-                const students:any = await TotalStudents('874c5bbc-843d-49c6-b736-eea58c381aab');
+                const students:any = await TotalStudents(params.profile);
                 if(students){
                     setTotalStudents(students);
                 }
-                const subjects:any = await TotalSubject('874c5bbc-843d-49c6-b736-eea58c381aab');
+                const subjects:any = await TotalSubject(params.profile);
                 if(subjects){
                     setTotalSubject(subjects);
                 }
-                const lectures:any = await TotalLectures('874c5bbc-843d-49c6-b736-eea58c381aab');
+                const lectures:any = await TotalLectures(params.profile);
                 if(lectures){
                     setTotalLecture(lectures);
                 }
@@ -71,5 +73,3 @@ const TeacherProfileComponent: React.FC = () => {
         </div>
     );
 }
-
-export default TeacherProfileComponent;

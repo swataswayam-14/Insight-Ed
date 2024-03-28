@@ -3,16 +3,15 @@
 import client from "@/db"
 
 
-export async function TeacherProfile(teacherId:string, teacherEmail:string) {
+export async function TeacherProfile(teacherId:string) {
     const teacher = await client.teacher.findUnique({
         where:{
             id:teacherId,
-            email:teacherEmail
         }
     })
     if(teacher){
-        const { username, email } = teacher;
-        return {username , email};
+        const { username, email, id } = teacher;
+        return {username , email, id};
     }else{
         console.log('teacher not found');
     }
