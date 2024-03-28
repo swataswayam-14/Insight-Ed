@@ -2,18 +2,20 @@
 import React, { useEffect, useState } from 'react';
 import { getStudentDetails } from '@/actions/Student';
 import { useRouter } from 'next/navigation';
-const StudentProfileComponent: React.FC = () => {
-    const [studentInfo, setStudentInfo] = useState<{ username: string, email: string } | undefined>(undefined);
+export default function StudentProfileComp({params}:any) {
+    const [studentInfo, setStudentInfo] = useState<{ username: string, email: string, id:string } | undefined>(undefined);
     const [id , setId] = useState("");
     const router = useRouter();
+    //console.log(params.profile);
+    
 
     useEffect(() => {
         const fetchStudentInfo = async () => {
             try {
-                const info = await getStudentDetails('701bce9c-8e9d-4e20-a5fe-a5535fc2c52e');
+                const info = await getStudentDetails(params.profile);
                 if (info) {
                     const { username, email, id } = info;
-                    setStudentInfo({ username, email });
+                    setStudentInfo({ username, email, id });
                     setId(id);
                 } else {
                     console.log('Student not found');
@@ -45,5 +47,3 @@ const StudentProfileComponent: React.FC = () => {
       </div>
     );
 }
-
-export default StudentProfileComponent;
