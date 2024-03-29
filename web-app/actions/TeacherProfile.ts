@@ -106,7 +106,7 @@ export async function findAllStudents(lectureId:string){
             student:true
         }
     });
-    return students;
+    return students.map((students)=>students);
 }
 
 export default async function getAllLectures(subjectid:any){

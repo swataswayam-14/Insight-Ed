@@ -28,7 +28,9 @@ const Subject: React.FC<SubjectProps> = ({ title, description, subjectid, isStud
         </div>
         )}
         {isStudent && (
-          <button className='bg-blue-200 p-4 hover:bg-blue-300 hover:scale-110 rounded-xl text-black font-medium'>View All students</button>  
+          <button className='bg-blue-200 p-4 hover:bg-blue-300 hover:scale-110 rounded-xl text-black font-medium' onClick={()=>{
+            router.push(`/profile/teacher/allstudents/${subjectid}`)
+          }}>View All students</button>  
         )}
       </div>
     </div>
