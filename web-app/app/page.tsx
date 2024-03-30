@@ -19,13 +19,17 @@ export default function Home() {
         <button className="btn btn-primary p-4 rounded-2xl text-black font-medium bg-gray-200 hover:text-lg mr-36 mb-4 hover:bg-gray-300 shadow-lg" onClick={()=>{
           Router.push('/teacher/signup')
         }}>Teacher Signup</button>
-        <button className="btn btn-primary p-4 rounded-2xl text-black font-medium bg-gray-200 hover:text-lg hover:bg-gray-300 shadow-lg">Teacher Signin</button>
+        <button onClick={()=>{
+          Router.push('/teacher/signin')
+        }} className="btn btn-primary p-4 rounded-2xl text-black font-medium bg-gray-200 hover:text-lg hover:bg-gray-300 shadow-lg">Teacher Signin</button>
       </div>
       <div>
         <button className="btn btn-primary p-4 rounded-2xl text-black font-medium bg-gray-200 hover:text-lg mr-36 mb-4 hover:bg-gray-300 shadow-lg" onClick={()=>{
           Router.push('/student/signup')
         }}>Student Signup</button>
-        <button className="btn btn-primary p-4 rounded-2xl text-black font-medium bg-gray-200 hover:text-lg hover:bg-gray-300 shadow-lg">Student Signin</button>
+        <button onClick={()=>{
+          Router.push('/student/signin')
+        }} className="btn btn-primary p-4 rounded-2xl text-black font-medium bg-gray-200 hover:text-lg hover:bg-gray-300 shadow-lg">Student Signin</button>
       </div>
     </div>
     </div>

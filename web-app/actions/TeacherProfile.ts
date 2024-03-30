@@ -106,5 +106,16 @@ export async function findAllStudents(lectureId:string){
             student:true
         }
     });
-    return students;
+    return students.map((students)=>students);
+}
+
+export default async function getAllLectures(subjectid:any){
+    const lectures = await client.lecture.findMany({
+        where:{
+            subjectid:subjectid
+        }
+    })
+
+    return lectures
+
 }

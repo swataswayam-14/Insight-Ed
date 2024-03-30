@@ -44,7 +44,7 @@ export default function TeacherSignUpComponent() {
                             setaddress(e.target.value);
                         }} label="Address" type={"address"} placeholder="House no 1416, 123456" />
                         <button onClick={async()=>{
-                            const id = await TeacherSignup(email, password, username, firstname, lastname, phoneno,address);
+                            const id = await TeacherSignup(username, firstname, lastname, password, phoneno, address, email);
                             Router.push(`/teacherprofile/${id}`)
                         }} type="button" className="mt-8 w-full text-white bg-gray-800 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2">Sign Up</button>
                     </div>

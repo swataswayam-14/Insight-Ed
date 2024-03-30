@@ -34,11 +34,10 @@ export async function TeacherSignin(email:string, password:string) {
         })
         if(teacher){
             console.log('Teacher is successfully signed in having the id '+teacher.id);
-            
+            return teacher.id;   
         }
-        return true;
     } catch (error) {
         console.log(error);
-        return false;
+        return -1;
     }
 }

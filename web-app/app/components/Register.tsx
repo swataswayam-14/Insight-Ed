@@ -1,12 +1,17 @@
 'use client'
 import React, { useState } from "react"
 import { RegisterCourse } from "@/actions/Student";
+import { useRouter } from "next/navigation";
 const RegisterComponent:React.FC = ()=>{
+    const Router = useRouter();
     const [subjectId, setSubjectId] = useState("")
     const [studentEmail , setStudentEmail] = useState("");
 
     async function Register() {
-        await RegisterCourse(subjectId, studentEmail)
+        const studentId = await RegisterCourse(subjectId, studentEmail)
+        if(studentId != -1){
+          Router.push(`/studentprofile/${studentId}`)
+        }
     }
 
     return <div className="bg-gray-100 p-4 rounded-lg shadow-md text-center max-w-md mx-auto mt-40">
