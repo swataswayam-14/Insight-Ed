@@ -9,9 +9,10 @@ interface SubjectProps {
   description: string;
   subjectid:string;
   isStudent:boolean;
+  yourCourses:boolean;
 }
 
-const Subject: React.FC<SubjectProps> = ({ title, description, subjectid, isStudent }) => {
+const Subject: React.FC<SubjectProps> = ({ title, description, subjectid, isStudent, yourCourses }) => {
     const router = useRouter();
   return (
     <div className="flex items-center justify-center h-screen">
@@ -27,7 +28,7 @@ const Subject: React.FC<SubjectProps> = ({ title, description, subjectid, isStud
         }}>View All Lecture</button>
         </div>
         )}
-        {isStudent && (
+        {(isStudent)&& (
           <button className='bg-blue-200 p-4 hover:bg-blue-300 hover:scale-110 rounded-xl text-black font-medium' onClick={()=>{
             router.push(`/profile/teacher/allstudents/${subjectid}`)
           }}>View All students</button>  

@@ -82,12 +82,13 @@ export async function RegisterCourse(subjectId:string, studentemail:string) {
             })
             if(register){
                 console.log('Registration id ' + register.id);
+                return student.id;
                 
             }
         }
     } catch (error) {
         console.log(error);
-        
+        return -1;
     }
 }
 
