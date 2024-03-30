@@ -12,11 +12,11 @@ Our solution tries to bridge the knowledge gap between a teacher and a student i
 
 **Client:** HTML, React.js
 
-**Backend:** Flask, Python, Keras, GeminiPro-SDK, HuggingFace API (EmotionLLM)
+**Backend:** Flask, Python, Keras, Tensorflow, Gemini API, Whisper API, HuggingFace Open-Source Models (EmotionLLM), MTCNN
 
 **Storage:** MongoDB, ChromaDB
 
-**Other Tools:** GCP APIs, Docker
+**Other Tools:** GCP (Cloud Run), Docker, Render
 
 ## Features
 
@@ -27,7 +27,7 @@ Used Transfer Learning on EfficientNetB7 model along with a custom dataset combi
 2. **Topic Modelling for Each Segment where Student lost attention**
 
 -> Through the power of Gemini-Pro SDK and OpenAI Whisper module, each of the segments where the loss of interest is detected is transcribed into text and the most relevant keywords(Topic Modelling) are done to bring out the topics where students need clarification.
--> The teacher is thus present with an analysis as to when did student lost his/her attention and on which topic(s) through the video lecture
+-> The teacher is thus present with an analysis as to when did the student lost his/her attention and on which topic(s) through the video lecture
 
 3. **Automatic Video Time-stamping into Different Topics- Saving Teacher's Time**
 
@@ -93,30 +93,6 @@ Create an enviroment variable 'GOOGLE_API_KEY' in the .env file for gemini-pro t
   GOOGLE_API_KEY=<YOUR_API_KEY>
 ```
 
-
-Create a virtual environment
-
-```bash
-  mkvirtualenv envname
-```
-
-Activate virtualenv
-
-```bash
-  workon envname
-```
-
-Install dependencies
-
-```bash
-  pip install -r requirements.txt
-```
-
-Run the website Locally
-
-```bash
-  python manage.py runserver
-```
 
 
 ## License
