@@ -94,30 +94,6 @@ Create an enviroment variable 'GOOGLE_API_KEY' in the .env file for gemini-pro t
 ```
 
 
-Create a virtual environment
-
-```bash
-  mkvirtualenv envname
-```
-
-Activate virtualenv
-
-```bash
-  workon envname
-```
-
-Install dependencies
-
-```bash
-  pip install -r requirements.txt
-```
-
-Run the website Locally
-
-```bash
-  python manage.py runserver
-```
-
 
 ## License
 
