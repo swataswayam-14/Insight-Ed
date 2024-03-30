@@ -52,6 +52,17 @@ from chromadb import Documents, EmbeddingFunction, Embeddings
 
 from flask_cors import CORS
 
+from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_google_genai import ChatGoogleGenerativeAI
+
+from langchain import PromptTemplate
+from langchain.chains.question_answering import load_qa_chain
+from langchain.document_loaders import PyPDFLoader
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain.vectorstores import Chroma
+from langchain.chains import RetrievalQA
+
+from langchain_google_genai import GoogleGenerativeAIEmbeddings
 
 app = Flask(__name__)
 CORS(app)
@@ -471,8 +482,8 @@ def create_chromadb(list_of_words, timestamps):
 
     
     client = chromadb.PersistentClient(path="vectorSearchForSearchWithinVideo")
-    client.delete_collection(name='embeddings_topics_for_search_within_video')
-    chroma_db = client.create_collection('embeddings_topics_for_search_within_video', embedding_function=GeminiEmbeddingFunction())
+    # client.delete_collection(name='embeddings_topics_for_search_within_video')
+    chroma_db = client.get_or_create_collection('embeddings_topics_for_search_within_video', embedding_function=GeminiEmbeddingFunction())
     
     for i, d in enumerate(list_of_words):
 
@@ -484,7 +495,7 @@ def create_chromadb(list_of_words, timestamps):
 
     return chroma_db
     
-    
+  
 @app.route('/searchWitihinVideo', methods=['GET', 'POST'])
 def searchWithinVideo():
 
@@ -594,7 +605,7 @@ def generateQuestionnaire():
 
     audio_model = whisper.load_model('base.en')
     option = whisper.DecodingOptions(language='en')
-    text = audio_model.transcribe("static/video.mp4")
+    text = audio_model.transcribe("static/video.mp4", language='en')
 
     text_data = []
     text_data.append(text['text'])
@@ -650,6 +661,104 @@ def keywords(text):
     final['recommendations']  = links
     print(final)
     return final
+
+
+def setUpLangChainWithGemini():
+    llm = ChatGoogleGenerativeAI(model="gemini-pro",google_api_key=api_key,temperature=0.2,convert_system_message_to_human=True)
+    return llm
+
+
+def setUpLangChainWithGeminiVision():
+
+    llm_vision = ChatGoogleGenerativeAI(model="gemini-pro-vision",google_api_key=api_key,temperature=0.2,convert_system_message_to_human=True)
+    return  llm_vision
+
+@app.route('/qnabotHandwritten', methods=['GET', 'POST'])
+def ragBasedQnABotHandwritten():
+    
+    full_path = request.full_path
+
+    directory = "static/docs/"
+    if os.path.exists(directory):
+        shutil.rmtree(directory)
+        os.makedirs(directory)
+    else:
+        os.makedirs(directory)
+        
+        
+    query_parameter = full_path.split('query=')[1]
+    uuid = query_parameter.split('&')[0].split("/")[5]
+    print(uuid)
+    url = "https://drive.google.com/uc?id={}".format(uuid)
+    output_file = "static/docs/notesHandwritten.pdf"  # Specify the name of the output file
+    print(url)
+
+    gdown.download(url, output_file, quiet=False)
+    llm = setUpLangChainWithGemini()
+    
+
+
+
+   
+@app.route('/qnabotNonHandwritten', methods=['GET', 'POST'])
+def ragBasedQnABotNonHandwritten():
+    
+    full_path = request.full_path
+
+    directory = "static/notes/"
+    if os.path.exists(directory):
+        shutil.rmtree(directory)
+        os.makedirs(directory)
+    else:
+        os.makedirs(directory)
+        
+        
+    query_parameter = full_path.split('query=')[1]
+    uuid = query_parameter.split('&')[0].split("/")[5]
+    question = query_parameter.split('&')[1]
+    print(uuid)
+    url = "https://drive.google.com/uc?id={}".format(uuid)
+    output_file = "static/notes/notesNonHandwritten.pdf"  # Specify the name of the output file
+    print(url)
+
+    gdown.download(url, output_file, quiet=False)
+    
+    llm = setUpLangChainWithGemini()
+    pdf_loader = PyPDFLoader("/static/notes/notesNonHandwritten.pdf")
+    pages = pdf_loader.load_and_split()
+    # print(pages[3].page_content)
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=10000, chunk_overlap=1000)
+    context = "\n\n".join(str(p.page_content) for p in pages)
+    texts = text_splitter.split_text(context)
+
+    embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001",google_api_key=api_key)
+    vector_index = Chroma.from_texts(texts, embeddings).as_retriever(search_kwargs={"k":3})
+    
+    template = """
+        Use the following pieces of context to answer the question at the end. If you don't know the answer, just say that you don't know, don't try to make up an answer. Keep the answer as concise as possible.
+        {context}
+        Question: {question}
+        Helpful Answer:
+    
+    """
+    QA_CHAIN_PROMPT = PromptTemplate.from_template(template)
+    qa_chain = RetrievalQA.from_chain_type(
+        llm,
+        retriever=vector_index,
+        # return_source_documents=True,
+        chain_type_kwargs={"prompt": QA_CHAIN_PROMPT}
+    )
+    question = "Describe the Multi-head attention layer in detail?"
+    result = qa_chain({"query": question})
+    return result["result"]
+
+
+@app.route('/qnabotVideo', methods=['GET', 'POST'])
+def ragBasedQnABotVideo():
+    full_path = request.full_path
+
+    query_parameter = full_path.split('query=')[1]
+
 
 # @app.route('/fetchRecommendations', methods=['GET', 'POST'])
 def fetchRecommendations(keywords):
