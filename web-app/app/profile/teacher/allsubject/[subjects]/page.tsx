@@ -26,7 +26,7 @@ export default function subjects({params}:any){
   return (
     <div>
       {subjects.map((subject) => (
-        <Subject key={subject.id} title={subject.title} description={subject.description} subjectid={subject.id} isStudent={false} />
+        <Subject key={subject.id} title={subject.title} description={subject.description} subjectid={subject.id} isStudent={false} yourCourses={false} />
       ))}
     </div>
     );
