@@ -620,51 +620,51 @@ def searchWithinVideo():
         
         
         
-@app.route('/generateQuestionnaire', methods=['GET', 'POST'])
-def generateQuestionnaire():
+# @app.route('/generateQuestionnaireFromAssignment', methods=['GET','POST'])
+# def generateQuestionnaire():
 
 
-    full_path = request.full_path
+#     full_path = request.full_path
 
-    # Extract the 'query' parameter from the full path
-    query_parameter = full_path.split('query=')[1]
-    grade = full_path.split('&')[1]
-    print(grade)
+#     # Extract the 'query' parameter from the full path
+#     query_parameter = full_path.split('query=')[1]
+#     grade = full_path.split('&')[1]
+#     print(grade)
     
-    directory = "static/"
-    shutil.rmtree(directory)
-    os.makedirs(directory)
+#     directory = "static/"
+#     shutil.rmtree(directory)
+#     os.makedirs(directory)
 
-    # url = query_parameter.split('&')[0]
-    uuid = query_parameter.split('&')[0].split("/")[5]
-    print(uuid)
-    url = "https://drive.google.com/uc?id={}".format(uuid)
-    output_file = "static/video.mp4"  # Specify the name of the output file
-    print(url)
+#     # url = query_parameter.split('&')[0]
+#     uuid = query_parameter.split('&')[0].split("/")[5]
+#     print(uuid)
+#     url = "https://drive.google.com/uc?id={}".format(uuid)
+#     output_file = "static/video.mp4"  # Specify the name of the output file
+#     print(url)
 
-    gdown.download(url, output_file, quiet=False)
+#     gdown.download(url, output_file, quiet=False)
 
-    audio_model = whisper.load_model('base.en')
-    option = whisper.DecodingOptions(language='en')
-    text = audio_model.transcribe("static/video.mp4", language='en')
+#     audio_model = whisper.load_model('base.en')
+#     option = whisper.DecodingOptions(language='en')
+#     text = audio_model.transcribe("static/video.mp4", language='en')
 
-    text_data = []
-    text_data.append(text['text'])
-    response = model_ai.generate_content(
-        '''
-        Generate a mcq consisting of 10 questions on the given content for a {}th grader. DO NOT try to bold any text or numbers with NO HEADING PRECEDONG the questions. The content is {}.
-        '''.format(grade, text['text']),
+#     text_data = []
+#     text_data.append(text['text'])
+#     response = model_ai.generate_content(
+#         '''
+#         Generate a mcq consisting of 10 questions on the given content for a {}th grader. DO NOT try to bold any text or numbers with NO HEADING PRECEDONG the questions. The content is {}.
+#         '''.format(grade, text['text']),
         
-    generation_config={
-          # "max_output_tokens": 2048,
-          "temperature": 0.5,
-          "top_p": 1
-      },
+#     generation_config={
+#           # "max_output_tokens": 2048,
+#           "temperature": 0.5,
+#           "top_p": 1
+#       },
           
-    )
+#     )
     
   
-    return response.text.split("\n")
+#     return response.text.split("\n")
 
     
     
@@ -770,7 +770,7 @@ def page_to_image(page):
     return image_path
 
 
-@app.route('/qnabotHandwritten', methods=['GET', 'POST'])
+@app.route('/qnabotHandwritten', methods=['POST'])
 def ragBasedQnABotHandwritten():
     
     
@@ -820,10 +820,16 @@ def ragBasedQnABotHandwritten():
             os.makedirs(directory2)
             
         
-        query_parameter = full_path.split('query=')[1]
-        uuid = query_parameter.split('&')[0].split("/")[5]
-        question = query_parameter.split('&')[1]
-        print(uuid)
+        # query_parameter = full_path.split('query=')[1]
+        # uuid = query_parameter.split('&')[0].split("/")[5]
+        # question = query_parameter.split('&')[1]
+        # print(uuid)
+         # full_path = request.full_path
+        # query_parameter = full_path.split('query=')[1]
+        # uuid = query_parameter.split('&')[0].split("/")[5]
+        data = request.get_json()
+        question = data.get('message')
+        uuid = data.get('url').split("/")[5]
         url = "https://drive.google.com/uc?id={}".format(uuid)
         output_file = "static/notes/notesHandwritten.pdf"  # Specify the name of the output file
         print(url)
@@ -863,7 +869,7 @@ def ragBasedQnABotHandwritten():
     
     
    
-@app.route('/qnabotNonHandwritten', methods=['GET', 'POST'])
+@app.route('/qnabotNonHandwritten', methods=['POST'])
 def ragBasedQnABotNonHandwritten():
     
     chroma_db_path = "chroma_db_qnabotNonHandwritten.pkl"
@@ -903,9 +909,15 @@ def ragBasedQnABotNonHandwritten():
             os.makedirs(directory)
             
             
-        query_parameter = full_path.split('query=')[1]
-        uuid = query_parameter.split('&')[0].split("/")[5]
-        question = query_parameter.split('&')[1]
+        # query_parameter = full_path.split('query=')[1]
+        # uuid = query_parameter.split('&')[0].split("/")[5]
+        # question = query_parameter.split('&')[1]
+         # full_path = request.full_path
+        # query_parameter = full_path.split('query=')[1]
+        # uuid = query_parameter.split('&')[0].split("/")[5]
+        data = request.get_json()
+        question = data.get('message')
+        uuid = data.get('url').split("/")[5]
         print(uuid)
         url = "https://drive.google.com/uc?id={}".format(uuid)
         output_file = "static/notes/notesNonHandwritten.pdf"  # Specify the name of the output file
@@ -945,57 +957,87 @@ def ragBasedQnABotNonHandwritten():
 
 
 
-def generateVideoTranscriptAndEmbeddings(uuid):
+def  VideoTranscriptEmbeddingsAndQuery(uuid, question):
     
-    #condiiton t check if vector database exists or not then only proceed with following
-    url = "https://drive.google.com/uc?id={}".format(uuid)
-    output_file = "static/docs/notesHandwritten.pdf"  # Specify the name of the output file
-    print(url)
-
-    gdown.download(url, output_file, quiet=False)
-    audio_model = whisper.load_model('base.en')
-    text = audio_model.transcribe("static/video.mp4", language='en')
-    result = text["text"]
     
+    chroma_db_path = "chroma_db_qnabotVideo.pkl"
     llm = setUpLangChainWithGemini()
-    pdf_loader = PyPDFLoader("/static/notes/notesNonHandwritten.pdf")
-    pages = pdf_loader.load_and_split()
-    # print(pages[3].page_content)
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=10000, chunk_overlap=1000)
-    context = "\n\n".join(str(p.page_content) for p in pages)
-    texts = text_splitter.split_text(context)
-
-    embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001",google_api_key=api_key)
-    vector_index = Chroma.from_texts(texts, embeddings).as_retriever(search_kwargs={"k":3})
     
-    template = """
+    
+    if os.path.exists(chroma_db_path):
+    # Load the existing Chroma instance
+        vector_index = Chroma.load(chroma_db_path)
+        
+        template = """
         Use the following pieces of context to answer the question at the end. If you don't know the answer, just say that you don't know, don't try to make up an answer. Keep the answer as concise as possible.
         {context}
         Question: {question}
         Helpful Answer:
+
+        """
+        QA_CHAIN_PROMPT = PromptTemplate.from_template(template)
+        qa_chain = RetrievalQA.from_chain_type(
+            llm,
+            retriever=vector_index,
+            # return_source_documents=True,
+            chain_type_kwargs={"prompt": QA_CHAIN_PROMPT}
+        )
+        result = qa_chain({"query": question})
+        return result["result"]
     
-    """
-    QA_CHAIN_PROMPT = PromptTemplate.from_template(template)
-    qa_chain = RetrievalQA.from_chain_type(
-        llm,
-        retriever=vector_index,
-        # return_source_documents=True,
-        chain_type_kwargs={"prompt": QA_CHAIN_PROMPT}
-    )
-    question = "Describe the Multi-head attention layer in detail?"
-    result = qa_chain({"query": question})
-    return result["result"]
+    else:
+        #condiiton t check if vector database exists or not then only proceed with following
+        url = "https://drive.google.com/uc?id={}".format(uuid)
+        output_file = "static/docs/notesHandwritten.pdf"  # Specify the name of the output file
+        print(url)
+
+        gdown.download(url, output_file, quiet=False)
+        audio_model = whisper.load_model('base.en')
+        text = audio_model.transcribe("static/video.mp4", language='en')
+        result = text["text"]
+        
+        llm = setUpLangChainWithGemini()
+        # pdf_loader = PyPDFLoader("/static/notes/notesNonHandwritten.pdf")
+        # pages = pdf_loader.load_and_split()
+        # print(pages[3].page_content)
+        # text_splitter = RecursiveCharacterTextSplitter(chunk_size=10000, chunk_overlap=1000)
+        # context = "\n\n".join(str(p.page_content) for p in pages)
+        # texts = text_splitter.split_text(context)
+
+        embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001",google_api_key=api_key)
+        vector_index = Chroma.from_texts(result, embeddings).as_retriever(search_kwargs={"k":2})
+        vector_index.save(chroma_db_path)
+        
+        template = """
+            Use the following pieces of context to answer the question at the end. If you don't know the answer, just say that you don't know, don't try to make up an answer. Keep the answer as concise as possible.
+            {context}
+            Question: {question}
+            Helpful Answer:
+        
+        """
+        QA_CHAIN_PROMPT = PromptTemplate.from_template(template)
+        qa_chain = RetrievalQA.from_chain_type(
+            llm,
+            retriever=vector_index,
+            # return_source_documents=True,
+            chain_type_kwargs={"prompt": QA_CHAIN_PROMPT}
+        )
+        result = qa_chain({"query": question})
+        return result["result"]
 
     
-@app.route('/qnabotVideo', methods=['GET', 'POST'])
+@app.route('/qnabotVideo', methods=['POST'])
 def ragBasedQnABotVideo():
     
-    full_path = request.full_path
-    query_parameter = full_path.split('query=')[1]
-    uuid = query_parameter.split('&')[0].split("/")[5]
-    question = query_parameter.split('&')[1]
-    generateVideoTranscriptAndEmbeddings(uuid)
-    
+    # full_path = request.full_path
+    # query_parameter = full_path.split('query=')[1]
+    # uuid = query_parameter.split('&')[0].split("/")[5]
+    data = request.get_json()
+    question = data.get('message')
+    uuid = data.get('url').split("/")[5]
+    # question = query_parameter.split('&')[1]
+    answer = VideoTranscriptEmbeddingsAndQuery(uuid, question)
+    return answer
     
     
     
