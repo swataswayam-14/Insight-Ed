@@ -42,8 +42,9 @@ export default function StudentProfileComp({params}:any) {
           router.push(`/profile/student/yourcourses/${id}`);
         }}>Your Courses</button>
         <button className="bg-white hover:text-lg hover:bg-blue-200 text-black p-4 border border-emerald-300 rounded-md mt-4" onClick={() => {
-          router.push('/profile/student/register');
-        }}>Register for a Course</button>
+            router.push('/profile/student/allcourses');
+        }}>Browse Courses</button>
+
       </div>
     );
 }

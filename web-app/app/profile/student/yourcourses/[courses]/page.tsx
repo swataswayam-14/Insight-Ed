@@ -15,27 +15,23 @@ interface SubjectProps {
     title: string;
     description: string;
     subjectid:string;
-    isStudent:boolean;
-    yourCourses:boolean;
-  }
+}
   
 
 
 
 
   
-  const Subject: React.FC<SubjectProps> = ({ title, description, subjectid, isStudent, yourCourses }) => {
+  const Subject: React.FC<SubjectProps> = ({ title, description, subjectid}) => {
       const router = useRouter();
     return (
       <div className="flex items-center justify-center h-screen">
         <div className="bg-gray-100 p-4 rounded-lg shadow-md text-center w-1/2">
           <h3 className="text-2xl font-bold text-gray-800 mb-2">{title}</h3>
           <p className="text-lg text-gray-600 mb-4">{description}</p>
-          {(yourCourses)&& (
             <button className='bg-blue-200 p-4 hover:bg-blue-300 hover:scale-110 rounded-xl text-black font-medium' onClick={()=>{
                 router.push(`/profile/student/lectures/${subjectid}`)
             }}>View Lectures</button>  
-          )}
         </div>
       </div>
     );
@@ -48,7 +44,7 @@ interface SubjectProps {
 export default function ResgisteredSubject({params}:any) {
     //const {studentid}:any = useParams()
     console.log(params.courses);
-    
+    const [searchQuery, setSearchQuery] = useState("");
     const [subjects, setSubjects] = useState<SubjectData[]>([]);
     useEffect(()=>{
         async function getSubjects() {
@@ -57,12 +53,22 @@ export default function ResgisteredSubject({params}:any) {
         }
         getSubjects();
     },[])
+    const filteredSubjects = subjects.filter(subject =>
+      subject.title.toLowerCase().includes(searchQuery.toLowerCase())
+    );
 
   return (
-    <div>
-      {subjects.map((subject) => (
-        <Subject key={subject.id} title={subject.title} description={subject.description} subjectid={subject.id} isStudent={true} yourCourses={true}/>
-      ))}
+    <div >
+          <input
+                type="text"
+                placeholder="Search by subject title"
+                value={searchQuery}
+                className="text-black ml-96 p-4 rounded-xl"
+                onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          {filteredSubjects.map((subject) => (
+                <Subject key={subject.id} title={subject.title} description={subject.description} subjectid={subject.id} />
+          ))}
     </div>
   );
 };
