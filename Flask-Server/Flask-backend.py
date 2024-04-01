@@ -48,12 +48,17 @@ from detect_faces_video import detect_faces
 from transformers import pipeline
 
 from chromadb import Documents, EmbeddingFunction, Embeddings
-
+from PyPDF2 import PdfFileReader
+import tempfile
+from pathlib import Path
 
 from flask_cors import CORS
 
+
+from langchain_core.messages import HumanMessage
 from langchain_google_genai import ChatGoogleGenerativeAI
-from langchain_google_genai import ChatGoogleGenerativeAI
+
+
 
 from langchain import PromptTemplate
 from langchain.chains.question_answering import load_qa_chain
@@ -494,7 +499,8 @@ def create_chromadb(list_of_words, timestamps):
         )
 
     return chroma_db
-    
+
+
   
 @app.route('/searchWitihinVideo', methods=['GET', 'POST'])
 def searchWithinVideo():
@@ -673,55 +679,248 @@ def setUpLangChainWithGeminiVision():
     llm_vision = ChatGoogleGenerativeAI(model="gemini-pro-vision",google_api_key=api_key,temperature=0.2,convert_system_message_to_human=True)
     return  llm_vision
 
+
+def perform_ocr(image_path):
+    
+    llm = ChatGoogleGenerativeAI(model="gemini-pro-vision",google_api_key=api_key, temperature=0.2, max_output_tokens=4096)
+# example
+    message = HumanMessage(
+    content=[
+        {
+            "type": "text",
+            "text": "You excel at extracting text from the images. Extract the full content of the image provided.",
+        },
+        {"type": "image_url", "image_url": "{}".format(image_path)},
+    ]
+)
+    content = llm.invoke([message]).content
+    return content
+
+
+def separate_pdf_and_ocr(pdf_path):
+
+    ocr_result = []
+    
+    with open(pdf_path, 'rb') as pdf_file:
+   
+        pdf_reader = PdfFileReader(pdf_file)
+        
+       
+        for page_num in range(pdf_reader.numPages):
+          
+            page = pdf_reader.getPage(page_num)
+            
+            image_path = page_to_image(page)
+            
+         
+            ocr_result.append(perform_ocr(image_path))
+          
+    return ocr_result
+
+
+# Handle an instance where when the user is done, those file gets deleted
+def page_to_image(page):
+    
+    save_dir = "static/notes/Handwriten/images"
+    image = page.to_image()
+
+    image = image.convert('RGB')
+ 
+    image_path = os.path.join(save_dir, 'image.png')
+
+   
+    with open(image_path, 'wb') as image_file:
+        image.save(image_file, format='PNG')
+    
+    return image_path
+
+
 @app.route('/qnabotHandwritten', methods=['GET', 'POST'])
 def ragBasedQnABotHandwritten():
     
-    full_path = request.full_path
+    
+    chroma_db_path = "chroma_db_qnabotHandwritten.pkl"
+    llm_vision = setUpLangChainWithGeminiVision()
+    llm = setUpLangChainWithGemini()
+    
+    
+    if os.path.exists(chroma_db_path):
+    # Load the existing Chroma instance
+        vector_index = Chroma.load(chroma_db_path)
+        
+        template = """
+        Use the following pieces of context to answer the question at the end. If you don't know the answer, just say that you don't know, don't try to make up an answer. Keep the answer as concise as possible.
+        {context}
+        Question: {question}
+        Helpful Answer:
 
-    directory = "static/docs/"
-    if os.path.exists(directory):
-        shutil.rmtree(directory)
-        os.makedirs(directory)
+        """
+        QA_CHAIN_PROMPT = PromptTemplate.from_template(template)
+        qa_chain = RetrievalQA.from_chain_type(
+            llm,
+            retriever=vector_index,
+            # return_source_documents=True,
+            chain_type_kwargs={"prompt": QA_CHAIN_PROMPT}
+        )
+        result = qa_chain({"query": question})
+        return result["result"]
+    
     else:
-        os.makedirs(directory)
+        
+        full_path = request.full_path
+
+        directory = "static/notes/"
+        directory2 = "static/notes/Handwriten/images"
+        if os.path.exists(directory):
+            shutil.rmtree(directory)
+            os.makedirs(directory)
+        else:
+            os.makedirs(directory)
+            
+        
+        if os.path.exists(directory2):
+            shutil.rmtree(directory2)
+            os.makedirs(directory2)
+        else:
+            os.makedirs(directory2)
+            
+        
+        query_parameter = full_path.split('query=')[1]
+        uuid = query_parameter.split('&')[0].split("/")[5]
+        question = query_parameter.split('&')[1]
+        print(uuid)
+        url = "https://drive.google.com/uc?id={}".format(uuid)
+        output_file = "static/notes/notesHandwritten.pdf"  # Specify the name of the output file
+        print(url)
+
+        gdown.download(url, output_file, quiet=False)
+        
+        llm = setUpLangChainWithGemini()
+        # pdf_loader = PyPDFLoader("/static/notes/notesHandwritten.pdf")
+        # pages = pdf_loader.load_and_split()
+        # print(pages[3].page_content)
+        # text_splitter = RecursiveCharacterTextSplitter(chunk_size=10000, chunk_overlap=1000)
+        # context = "\n\n".join(str(p.page_content) for p in pages)
+        # texts = text_splitter.split_text(context)
+        pdf_path = "static/notes/notesHandwritten.pdf"
+        texts = separate_pdf_and_ocr(pdf_path)
+        embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001",google_api_key=api_key)
+        vector_index = Chroma.from_texts(texts, embeddings).as_retriever(search_kwargs={"k":3})
+        vector_index.save(chroma_db_path)
         
         
-    query_parameter = full_path.split('query=')[1]
-    uuid = query_parameter.split('&')[0].split("/")[5]
-    print(uuid)
+        template = """
+            Use the following pieces of context to answer the question at the end. If you don't know the answer, just say that you don't know, don't try to make up an answer. Keep the answer as concise as possible.
+            {context}
+            Question: {question}
+            Helpful Answer:
+        
+        """
+        QA_CHAIN_PROMPT = PromptTemplate.from_template(template)
+        qa_chain = RetrievalQA.from_chain_type(
+            llm,
+            retriever=vector_index,
+            # return_source_documents=True,
+            chain_type_kwargs={"prompt": QA_CHAIN_PROMPT}
+        )
+        result = qa_chain({"query": question})
+        return result["result"]
+    
+    
+   
+@app.route('/qnabotNonHandwritten', methods=['GET', 'POST'])
+def ragBasedQnABotNonHandwritten():
+    
+    chroma_db_path = "chroma_db_qnabotNonHandwritten.pkl"
+    llm = setUpLangChainWithGemini()
+    
+    
+    if os.path.exists(chroma_db_path):
+    # Load the existing Chroma instance
+        vector_index = Chroma.load(chroma_db_path)
+        
+        template = """
+        Use the following pieces of context to answer the question at the end. If you don't know the answer, just say that you don't know, don't try to make up an answer. Keep the answer as concise as possible.
+        {context}
+        Question: {question}
+        Helpful Answer:
+
+        """
+        QA_CHAIN_PROMPT = PromptTemplate.from_template(template)
+        qa_chain = RetrievalQA.from_chain_type(
+            llm,
+            retriever=vector_index,
+            # return_source_documents=True,
+            chain_type_kwargs={"prompt": QA_CHAIN_PROMPT}
+        )
+        result = qa_chain({"query": question})
+        return result["result"]
+    
+    else:
+        
+        full_path = request.full_path
+
+        directory = "static/notes/"
+        if os.path.exists(directory):
+            shutil.rmtree(directory)
+            os.makedirs(directory)
+        else:
+            os.makedirs(directory)
+            
+            
+        query_parameter = full_path.split('query=')[1]
+        uuid = query_parameter.split('&')[0].split("/")[5]
+        question = query_parameter.split('&')[1]
+        print(uuid)
+        url = "https://drive.google.com/uc?id={}".format(uuid)
+        output_file = "static/notes/notesNonHandwritten.pdf"  # Specify the name of the output file
+        print(url)
+
+        gdown.download(url, output_file, quiet=False)
+        
+        llm = setUpLangChainWithGemini()
+        pdf_loader = PyPDFLoader("/static/notes/notesNonHandwritten.pdf")
+        pages = pdf_loader.load_and_split()
+        # print(pages[3].page_content)
+        text_splitter = RecursiveCharacterTextSplitter(chunk_size=10000, chunk_overlap=1000)
+        context = "\n\n".join(str(p.page_content) for p in pages)
+        texts = text_splitter.split_text(context)
+
+        embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001",google_api_key=api_key)
+        vector_index = Chroma.from_texts(texts, embeddings).as_retriever(search_kwargs={"k":3})
+        vector_index.save(chroma_db_path)
+        
+        
+        template = """
+            Use the following pieces of context to answer the question at the end. If you don't know the answer, just say that you don't know, don't try to make up an answer. Keep the answer as concise as possible.
+            {context}
+            Question: {question}
+            Helpful Answer:
+        
+        """
+        QA_CHAIN_PROMPT = PromptTemplate.from_template(template)
+        qa_chain = RetrievalQA.from_chain_type(
+            llm,
+            retriever=vector_index,
+            # return_source_documents=True,
+            chain_type_kwargs={"prompt": QA_CHAIN_PROMPT}
+        )
+        result = qa_chain({"query": question})
+        return result["result"]
+
+
+
+def generateVideoTranscriptAndEmbeddings(uuid):
+    
+    #condiiton t check if vector database exists or not then only proceed with following
     url = "https://drive.google.com/uc?id={}".format(uuid)
     output_file = "static/docs/notesHandwritten.pdf"  # Specify the name of the output file
     print(url)
 
     gdown.download(url, output_file, quiet=False)
-    llm = setUpLangChainWithGemini()
-    
-
-
-
-   
-@app.route('/qnabotNonHandwritten', methods=['GET', 'POST'])
-def ragBasedQnABotNonHandwritten():
-    
-    full_path = request.full_path
-
-    directory = "static/notes/"
-    if os.path.exists(directory):
-        shutil.rmtree(directory)
-        os.makedirs(directory)
-    else:
-        os.makedirs(directory)
-        
-        
-    query_parameter = full_path.split('query=')[1]
-    uuid = query_parameter.split('&')[0].split("/")[5]
-    question = query_parameter.split('&')[1]
-    print(uuid)
-    url = "https://drive.google.com/uc?id={}".format(uuid)
-    output_file = "static/notes/notesNonHandwritten.pdf"  # Specify the name of the output file
-    print(url)
-
-    gdown.download(url, output_file, quiet=False)
+    audio_model = whisper.load_model('base.en')
+    text = audio_model.transcribe("static/video.mp4", language='en')
+    result = text["text"]
     
     llm = setUpLangChainWithGemini()
     pdf_loader = PyPDFLoader("/static/notes/notesNonHandwritten.pdf")
@@ -752,14 +951,20 @@ def ragBasedQnABotNonHandwritten():
     result = qa_chain({"query": question})
     return result["result"]
 
-
+    
 @app.route('/qnabotVideo', methods=['GET', 'POST'])
 def ragBasedQnABotVideo():
+    
     full_path = request.full_path
-
     query_parameter = full_path.split('query=')[1]
-
-
+    uuid = query_parameter.split('&')[0].split("/")[5]
+    question = query_parameter.split('&')[1]
+    generateVideoTranscriptAndEmbeddings(uuid)
+    
+    
+    
+    
+    
 # @app.route('/fetchRecommendations', methods=['GET', 'POST'])
 def fetchRecommendations(keywords):
     
