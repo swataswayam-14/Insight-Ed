@@ -238,7 +238,8 @@ def identifyImage(folder_path):
         value = isDrowsy(os.path.join(folder_path, img))
         # value=random.randint(1,3)
         if(value == 1):
-            isDrowsiness.append("Yes")
+            # isDrowsiness.append("Yes")
+            isDrowsyGeminiProVision.append("Yes")
             emt.append("N/A")
             timecount.append(time[count])
             temp.append((timecount, emt, isDrowsiness))
@@ -247,7 +248,8 @@ def identifyImage(folder_path):
             
             isDrowsiness.append("N/A")
             # print(os.path.join(folder_path, img))
-            pred_emotions = emotions(os.path.join(folder_path, img))
+            # pred_emotions = emotions(os.path.join(folder_path, img))
+            pred_emotions = EmotionGeminiProVision(os.path.join(folder_path, img))
             emt.append(pred_emotions)
             timecount.append(time[count])
             temp.append((timecount, emt, isDrowsiness))
@@ -297,7 +299,40 @@ def build_model():
 model = build_model()
 model.load_weights('my_checkpoint.weights.h5')
     
+
+def isDrowsyGeminiProVision(image_path):
     
+    llm_vision = ChatGoogleGenerativeAI(model="gemini-pro-vision",google_api_key=api_key)
+
+    message = HumanMessage(
+    content=[
+        {
+            "type": "text",
+            "text": "Just output the word 'YES' of the person in the image is feeling 'sleepy' or 'drowsy' else output 'NO' if not.",
+        },
+        {"type": "image_url", "image_url": "{}".format(image_path)},
+    ]
+)
+    answer = llm_vision.invoke([message]).content
+    return answer
+
+def EmotionGeminiProVision(image_path):
+    
+    llm_vision = ChatGoogleGenerativeAI(model="gemini-pro-vision",google_api_key=api_key)
+
+    message = HumanMessage(
+    content=[
+        {
+            "type": "text",
+            "text": "Just output the classification of the emotion of the human face in the image.",
+        },
+        {"type": "image_url", "image_url": "{}".format(image_path)},
+    ]
+)
+    answer = llm_vision.invoke([message]).content
+    return answer
+
+
 def isDrowsy(file_path):
     
     print(file_path)
