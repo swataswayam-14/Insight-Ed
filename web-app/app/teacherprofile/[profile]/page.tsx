@@ -65,7 +65,7 @@ export default function TeacherProfileComp({params}:any){
             <p className="text-lg text-gray-600">Loading teacher info...</p>
         )}
             <button className="bg-blue-500 hover:text-lg hover:bg-blue-600 text-white px-4 py-2 rounded-md mt-4 mr-2" onClick={() => {
-                Router.push('/profile/teacher/addsubject');
+                Router.push(`/profile/teacher/addsubject/${teacherInfo?.id}`);
             }}>Add Subject</button>
             <button className="bg-green-500 hover:text-lg hover:bg-green-600 text-white px-4 py-2 rounded-md mt-4" onClick={() => {
                 Router.push(`/profile/teacher/allsubject/${teacherInfo?.id}`)

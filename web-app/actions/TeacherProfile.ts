@@ -36,7 +36,7 @@ export async function TotalSubject(teacherId:string) {
             teacherid:teacherId
         }
     })
-    console.log(subjects);
+    //console.log(subjects);
     
     // if(subjects){
     //     return subjects.map((sub)=>sub);
