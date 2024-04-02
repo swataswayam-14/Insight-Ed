@@ -124,3 +124,33 @@ export async function YourCourses(studentid:string) {
 
     return subjects;
 }
+
+
+
+export async function getScheduledLectures(studentId: string) {
+    const studentTeachers = await client.studentteacher.findMany({
+      where: {
+        studentid: studentId,
+      },
+      select: {
+        teacherid: true,
+      },
+    });
+  
+    const teacherIds = studentTeachers.map((st) => st.teacherid);
+  
+    const today = new Date().toLocaleDateString('en-GB') // Get today's date
+  
+    const scheduledLectures = await client.lecture.findMany({
+      where: {
+        teacherid: {
+          in: teacherIds,
+        },
+        date: today,
+      },
+    });
+    console.log(scheduledLectures);
+    
+  
+    return scheduledLectures;
+  }

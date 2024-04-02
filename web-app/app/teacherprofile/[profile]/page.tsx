@@ -70,6 +70,10 @@ export default function TeacherProfileComp({params}:any){
             <button className="bg-green-500 hover:text-lg hover:bg-green-600 text-white px-4 py-2 rounded-md mt-4" onClick={() => {
                 Router.push(`/profile/teacher/allsubject/${teacherInfo?.id}`)
             }}>Analyse For a Subject</button>
+            <button className="bg-green-500 hover:text-lg hover:bg-green-600 text-white px-4 py-2 rounded-md mt-4" onClick={() => {
+                //Router.push(`/profile/teacher/allsubject/${teacherInfo?.id}`)
+                Router.push(`/profile/teacher/scheduledLectures/${teacherInfo?.id}`)
+            }}>Check your scheduled lectures</button>
         </div>
     );
 }
