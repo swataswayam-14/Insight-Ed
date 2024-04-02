@@ -65,27 +65,45 @@ export async function RegisterCourse(subjectId:string, studentemail:string) {
     console.log('hit');
     
     try {
-        const student = await client.student.findUnique({
+        const subject = await client.subject.findUnique({
             where:{
-                email:studentemail
+                id:subjectId
+            }, include:{
+                teacher:true
             }
         })
-        console.log(student);
-        
-        if(student){
-            const studentid = student.id;
-            const register = await client.studentsubject.create({
-                data:{
-                    studentid:studentid,
-                    subjectid:subjectId
+        console.log(subject?.teacher.id);
+        if(subject){
+            const student = await client.student.findUnique({
+                where:{
+                    email:studentemail
                 }
             })
-            if(register){
-                console.log('Registration id ' + register.id);
-                return student.id;
-                
+            console.log(student);
+            
+            if(student){
+                const studentid = student.id;
+                const register = await client.studentsubject.create({
+                    data:{
+                        studentid:studentid,
+                        subjectid:subjectId
+                    }
+                })
+                const teacherStudent = await client.studentteacher.create({
+                    data:{
+                        studentid:student.id,
+                        teacherid:subject.teacher.id
+                    }
+                })
+                if(register && teacherStudent){
+                    console.log('Registration id ' + register.id);
+    
+                    return student.id;
+                    
+                }
             }
         }
+        
     } catch (error) {
         console.log(error);
         return -1;
