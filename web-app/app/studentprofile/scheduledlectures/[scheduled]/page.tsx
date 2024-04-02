@@ -29,7 +29,7 @@ export default function Scheduled({params}:any){
                     <div>
                         <p className="text-lg font-semibold">{lecture.title}</p>
                         <p className="text-white">{lecture.date}</p>
-                        <p className="text-gray-600">{lecture.teacherName}</p>
+                        <p className="text-gray-600">By: {lecture.teacher.firstname} {lecture.teacher.lastname}</p>
                         <p className='text-gray-800'>{lecture.time}</p>
                     </div>
                     <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Join Class</button>

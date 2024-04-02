@@ -149,8 +149,33 @@ export async function getScheduledLectures(studentId: string) {
         date: today,
       },
     });
+
+    const teachers = await client.teacher.findMany({
+        where: {
+            id: {
+                in: teacherIds,
+            },
+        },
+        select: {
+            firstname: true,
+            lastname: true,
+            id:true
+        },
+    });
+
+    const scheduledLecturesWithTeachers = scheduledLectures.map((lecture) => {
+        const teacher = teachers.find((t) => t.id === lecture.teacherid);
+        const teacherInfo = teacher
+            ? { firstname: teacher.firstname, lastname: teacher.lastname }
+            : { firstname: 'Unknown', lastname: 'Teacher' };
+        return {
+            ...lecture,
+            teacher: teacherInfo
+        };
+    });
+
     console.log(scheduledLectures);
     
   
-    return scheduledLectures;
+    return scheduledLecturesWithTeachers;
   }
