@@ -30,17 +30,17 @@ import pandas as pd
 
 import whisper
 
-# import keras
-# from keras.models import Sequential
-# from keras.layers import Lambda, Dense
+import keras
+from keras.models import Sequential
+from keras.layers import Lambda, Dense
 
 
-# import tensorflow as tf
+import tensorflow as tf
 
 
 from detect_faces_video import detect_faces
 
-# from transformers import pipeline
+from transformers import pipeline
 
 from chromadb import Documents, EmbeddingFunction, Embeddings
 from PyPDF2 import PdfFileReader
@@ -60,16 +60,34 @@ from langchain.document_loaders import PyPDFLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.vectorstores import Chroma
 from langchain.chains import RetrievalQA
-
+from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
+from langchain.vectorstores import FAISS
+from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
+from langchain.chains import create_retrieval_chain
+from langchain.chains.combine_documents import create_stuff_documents_chain
+from langchain_core.messages import HumanMessage
+from langchain.chains import create_history_aware_retriever, create_retrieval_chain
+from langchain.chains.combine_documents import create_stuff_documents_chain
+from langchain_community.chat_message_histories import ChatMessageHistory
+from langchain_community.vectorstores import Chroma
+from langchain_core.chat_history import BaseChatMessageHistory
+from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
+from langchain_core.runnables.history import RunnableWithMessageHistory
+from langchain_text_splitters import RecursiveCharacterTextSplitter
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = Flask(__name__)
 CORS(app)
 
-directory = "static/"
-if(os.path.exists(directory)):
-    shutil.rmtree(directory)
-os.makedirs(directory)
+# directory = "static/"
+# if(os.path.exists(directory)):
+#     shutil.rmtree(directory)
+#     os.makedirs(directory)
+# else:
+#     os.makedirs(directory)
 
 
 api_key = os.getenv('GOOGLE_API_KEY')
@@ -149,12 +167,51 @@ def predict():
         # "confidence": str(classes[0][0][2]),
         # "upload_time": datetime.now()
     })
+def isDrowsyGeminiProVision(image_path):
+    
+    llm_vision = ChatGoogleGenerativeAI(model="gemini-pro-vision",google_api_key=api_key)
+    print(image_path)
+    message = HumanMessage(
+    content=[
+        {
+            "type": "text",
+            "text": "You are an expert in detecting if a person is feeling drowsy or sleepy or not.Just output the word 'YES' if the face in the image is feeling SLEEPY or DROWSY else output 'NO' in everything else. Capture even the slightest hint of drowsiness." ,
+        },
+        {"type": "image_url", "image_url": "{}".format(image_path)},
+    ]
+)
+    answer = llm_vision.invoke([message]).content
+    print("Drwosiness answer: ", answer)
+    return answer
+    
+    
+def EmotionGeminiProVision(image_path):
+    
+    llm_vision = ChatGoogleGenerativeAI(model="gemini-pro-vision",google_api_key=api_key)
 
+    message = HumanMessage(
+    content=[
+        {
+            "type": "text",
+            "text": "You are an expert in classifying the emotion of the face. Capture even the slightest emotion and appropriately classify it. Just output the ONE WORD classification of the emotion of the human face in the image.",
+        },
+        {"type": "image_url", "image_url": "{}".format(image_path)},
+    ]
+    
+    
+)
+
+    answer = llm_vision.invoke([message]).content
+   
+    return answer
+    
+    
+    
 def detect_faces(video_path):
     
     detector  = MTCNN()
     # print("Hi")
-    interval = 20
+   
     uuid = video_path.split('&')[0].split("/")[5]
     # print("uuid is:", uuid)
     url = "https://drive.google.com/uc?id={}".format(uuid)
@@ -166,7 +223,9 @@ def detect_faces(video_path):
     # response = requests.get(url))
     # with open("static/video.mp4", 'wb') as f:
     #     f.write(response.content)
-        
+    length = mp.VideoFileClip("static/video.mp4").duration
+    interval = int(0.1*length)
+    print("Interval is", interval)
     # cap = cv2.VideoCapture('demo-student.mp4')
     cap = cv2.VideoCapture('static/video.mp4')
 
@@ -225,28 +284,34 @@ def identifyImage(folder_path):
     time = pickle.load(open('students_timestamps_all.pkl', 'rb'))
     temp = []
     for img in tqdm(os.listdir(folder_path)):
-        
+        # print(folder_path)
+        # print(img)
         emt = []
         isDrowsiness = []
         timecount = []
-        value = isDrowsy(os.path.join(folder_path, img))
+        # if ("YES" in isDrowsy(os.path.join(folder_path, img)).split()) : value = 1
+        # else: value = 0
         # value=random.randint(1,3)
+        value = isDrowsy(os.path.join(folder_path, img))
+        print("Valus is",value)
         if(value == 1):
             # isDrowsiness.append("Yes")
-            isDrowsyGeminiProVision.append("Yes")
+            isDrowsiness.append("Yes")
             emt.append("N/A")
             timecount.append(time[count])
             temp.append((timecount, emt, isDrowsiness))
-            
+            # print(emt)
+            # print(isDrowsiness)
         elif(value == 0):
             
             isDrowsiness.append("N/A")
             # print(os.path.join(folder_path, img))
             # pred_emotions = emotions(os.path.join(folder_path, img))
-            pred_emotions = EmotionGeminiProVision(os.path.join(folder_path, img))
+            pred_emotions = emotions(os.path.join(folder_path, img))
             emt.append(pred_emotions)
             timecount.append(time[count])
             temp.append((timecount, emt, isDrowsiness))
+            # print(temp)
         # emotion.append(emt)
         # drowsiness.append(isDrowsiness)
         # timestamps.append(time)
@@ -290,41 +355,13 @@ def build_model():
     model.add(Dense(1, activation='sigmoid'))
     return model
 
-# model = build_model()
-# model.load_weights('my_checkpoint.weights.h5')
+model = build_model()
+model.load_weights('my_checkpoint.weights.h5')
     
 
-def isDrowsyGeminiProVision(image_path):
-    
-    llm_vision = ChatGoogleGenerativeAI(model="gemini-pro-vision",google_api_key=api_key)
 
-    message = HumanMessage(
-    content=[
-        {
-            "type": "text",
-            "text": "Just output the word 'YES' of the person in the image is feeling 'sleepy' or 'drowsy' else output 'NO' if not.",
-        },
-        {"type": "image_url", "image_url": "{}".format(image_path)},
-    ]
-)
-    answer = llm_vision.invoke([message]).content
-    return answer
-
-def EmotionGeminiProVision(image_path):
-    
-    llm_vision = ChatGoogleGenerativeAI(model="gemini-pro-vision",google_api_key=api_key)
-
-    message = HumanMessage(
-    content=[
-        {
-            "type": "text",
-            "text": "Just output the classification of the emotion of the human face in the image.",
-        },
-        {"type": "image_url", "image_url": "{}".format(image_path)},
-    ]
-)
-    answer = llm_vision.invoke([message]).content
-    return answer
+    # answer = llm_vision.invoke([message]).content
+    # return answer
 
 
 def isDrowsy(file_path):
@@ -335,10 +372,10 @@ def isDrowsy(file_path):
     expanded_img = np.expand_dims(img_array,axis=0)
     # preprocessed_img = tf.keras.applications.efficientnet.preprocess_input(expanded_img)
   
-    print(model.summary())
+    # print(model.summary())
     result = model.predict(expanded_img, verbose=0)
     # pred = np.argmax(result, axis=1)
-    if result[0] > 0.5 :
+    if result[0] > 0.7 :
         pred = 1
     else:
         pred = 0
@@ -346,7 +383,7 @@ def isDrowsy(file_path):
     return pred
 
 
-# pipe = pipeline("image-classification", model="jayanta/vit-base-patch16-224-in21k-emotion-detection")
+pipe = pipeline("image-classification", model="jayanta/vit-base-patch16-224-in21k-emotion-detection")
 
 def emotions(file_path):
 
@@ -471,11 +508,11 @@ def speechRecognitionFullOneShot():
     os.makedirs(directory)
 
     uuid = query_parameter.split('&')[0].split("/")[5]
-    print(uuid)
+    # print(uuid)
     url = "https://drive.google.com/uc?id={}".format(uuid)
     output_file = "static/video.mp4"  
-    print(url)
-
+    # print(url)
+    # print(api_key)
     gdown.download(url, output_file, quiet=False)
 
     video = mp.VideoFileClip("static/video.mp4")
@@ -484,16 +521,17 @@ def speechRecognitionFullOneShot():
     timestamp1 = 0
     interval = int(interval)
     temp = []
-
+    print("Duration is: ", length)
     while((timestamp1 + interval) < int(length)):
-
+        # print(timestamp1 + interval)
+        # print(timestamp1)
         timestamp1 += interval
         clip = video.subclip(timestamp2, timestamp1)
         
         clip.write_videofile("static/video_clipped_{}.mp4".format(count), codec='libx264', audio_codec='aac')
         
         audio_model = whisper.load_model('base.en')
-        option = whisper.DecodingOptions(language='en')
+
         text = audio_model.transcribe("static/video_clipped_{}.mp4".format(count), language='en')
 
         keywords_now = keywords(text['text'])['keywords']
@@ -514,20 +552,23 @@ def speechRecognitionFullOneShot():
 
 def create_chromadb(list_of_words, timestamps):
 
-    
-    client = chromadb.PersistentClient(path="vectorSearchForSearchWithinVideo")
+    print("Timestamps: ", timestamps)
+    # client = chromadb.PersistentClient(path="vectorSearchForSearchWithinVideo")
+    client = chromadb.Client()
     # client.delete_collection(name='embeddings_topics_for_search_within_video')
-    chroma_db = client.get_or_create_collection('embeddings_topics_for_search_within_video', embedding_function=GeminiEmbeddingFunction())
+    if 'embeddings_topics_for_search_within_video' in client.list_collections():
+        client.delete_collection(name='embeddings_topics_for_search_within_video')
+    db = client.get_or_create_collection('embeddings_topics_for_search_within_video', embedding_function=GeminiEmbeddingFunction())
     
     for i, d in enumerate(list_of_words):
 
-        chroma_db.add(
+        db.add(
             documents=d,
             ids = str(i),
-            metadatas={'Timestamp_{}'.format(i): str(timestamps[i][0]) + '_' + str(timestamps[i][1])}
+            metadatas={'Timestamp_{}'.format(i): str(timestamps[i][0]) + '-' + str(timestamps[i][1])}
         )
 
-    return chroma_db
+    return db
 
 
   
@@ -540,7 +581,7 @@ def searchWithinVideo():
         os.remove('timestamps_videosearch.pkl')
         
     count = 0
-    stride = 20
+    stride = 50
     full_path = request.full_path
 
 
@@ -584,29 +625,29 @@ def searchWithinVideo():
 
         timestamp2 = timestamp1  
        
-        print(timestamp1)
-        print(timestamp2)
+        # print(timestamp1)
+        # print(timestamp2)
         count += 1
         temp.append(timecount)
         
     pickle.dump(topics, open('topics_videosearch.pkl', 'wb'))
     pickle.dump(timecount, open('timestamps_videosearch.pkl', 'wb'))
-    print(timecount)
-    print(topics)
-    chroma_db = create_chromadb(topics, timestamps=timecount)
-    print(pd.DataFrame(chroma_db.peek()))
-    print(pd.DataFrame(chroma_db.get()))
+    # print(timecount)
+    # print(topics)
+    db = create_chromadb(topics, timestamps=timecount)
+    print(pd.DataFrame(db.peek()))
+    print(pd.DataFrame(db.get()))
 
-    result = chroma_db.query(query_texts=[query], n_results=num)
+    result = db.query(query_texts=[query], n_results=num)
   
     # json_data = '{"data":null,"distances":[[0.08081431700730621,0.10110898726031427,0.1663002628724509]],"documents":[["Machine Learning Prediction","Machine Learning Supervised Learning","Machine learning Supervised learning Label"]],"embeddings":null,"ids":[["3","0","2"]],"metadatas":[[{"Timestamp_3":"60_80"},{"Timestamp_0":"0_20"},{"Timestamp_2":"40_60"}]],"uris":null}'
 
 
-    data = json.loads(result)
+    # data = json.loads(result)
 
- 
+    print("Result is:", result)
     timestamps = []
-    for metadata in data.get("metadatas", []):
+    for metadata in result['metadatas']:
         for timestamp in metadata:
             timestamps.extend(timestamp.values())
             
@@ -667,12 +708,12 @@ def keywords(text):
 
  
     response = model_ai.generate_content('''
-    Return ONLY 2-3 most relavant keywords which summarizes, has essence and captures semantic meaning of the following as instructed for the following -{}. Just generate the Keywords and DO NOT BOLD THEM OR APPLY ANY NUMBER PRECEDING THEM.
+    Return ONLY 2-3 most relavant keywords which summarizes, has essence and captures semantic meaning of the following as instructed for the following -{}. Just generate the KEYWORDS ONLY.
     '''
     .format(text),
           generation_config={
           # "max_output_tokens": 2048,
-          "temperature": 0.9,
+          "temperature": 0.3,
           "top_p": 1
       },
 
@@ -683,17 +724,17 @@ def keywords(text):
     response_dict = response[0]._result
     candidates = response_dict.candidates
     # fetched = candidates[0]['content']['parts'][0]['text']
-    # Extracting text
+    fetched = ""
     if candidates:
-    # Assuming candidates is a list
+        
         candidate = candidates[0]
         parts = candidate.content.parts
         if parts:
             fetched = parts[0].text
             # print(text)
     final['keywords'] = fetched.split("\n")
-    links = fetchRecommendations(fetched)
-    final['recommendations']  = links
+    # links = fetchRecommendations(fetched)
+    # final['recommendations']  = links
     print(final)
     return final
 
@@ -764,7 +805,7 @@ def page_to_image(page):
     return image_path
 
 
-@app.route('/qnabotHandwritten', methods=['POST'])
+@app.route('/qnabotHandwritten', methods=['GET', 'POST'])
 def ragBasedQnABotHandwritten():
     
     
@@ -863,174 +904,151 @@ def ragBasedQnABotHandwritten():
     
     
    
-@app.route('/qnabotNonHandwritten', methods=['POST'])
+@app.route('/qnabotNonHandwritten', methods=['GET','POST'])
 def ragBasedQnABotNonHandwritten():
     
-    chroma_db_path = "chroma_db_qnabotNonHandwritten.pkl"
-    llm = setUpLangChainWithGemini()
-    
-    
-    if os.path.exists(chroma_db_path):
-    # Load the existing Chroma instance
-        vector_index = Chroma.load(chroma_db_path)
-        
-        template = """
-        Use the following pieces of context to answer the question at the end. If you don't know the answer, just say that you don't know, don't try to make up an answer. Keep the answer as concise as possible.
-        {context}
-        Question: {question}
-        Helpful Answer:
 
-        """
-        QA_CHAIN_PROMPT = PromptTemplate.from_template(template)
-        qa_chain = RetrievalQA.from_chain_type(
-            llm,
-            retriever=vector_index,
-            # return_source_documents=True,
-            chain_type_kwargs={"prompt": QA_CHAIN_PROMPT}
-        )
-        result = qa_chain({"query": question})
-        return result["result"]
-    
+    full_path = request.full_path
+
+    directory = "static/notes/"
+    if os.path.exists(directory):
+        shutil.rmtree(directory)
+        os.makedirs(directory)
     else:
+        os.makedirs(directory)
         
-        full_path = request.full_path
+        
+    query_parameter = full_path.split('query=')[1]
+    uuid = query_parameter.split('&')[0].split("/")[5]
+    question = query_parameter.split('&')[1]
+    #     full_path = request.full_path
+    # query_parameter = full_path.split('query=')[1]
+    # uuid = query_parameter.split('&')[0].split("/")[5]
 
-        directory = "static/notes/"
-        if os.path.exists(directory):
-            shutil.rmtree(directory)
-            os.makedirs(directory)
-        else:
-            os.makedirs(directory)
-            
-            
-        # query_parameter = full_path.split('query=')[1]
-        # uuid = query_parameter.split('&')[0].split("/")[5]
-        # question = query_parameter.split('&')[1]
-         # full_path = request.full_path
-        # query_parameter = full_path.split('query=')[1]
-        # uuid = query_parameter.split('&')[0].split("/")[5]
-        data = request.get_json()
-        question = data.get('message')
-        uuid = data.get('url').split("/")[5]
-        print(uuid)
-        url = "https://drive.google.com/uc?id={}".format(uuid)
-        output_file = "static/notes/notesNonHandwritten.pdf"  # Specify the name of the output file
-        print(url)
+    print(uuid)
+    url = "https://drive.google.com/uc?id={}".format(uuid)
+    output_file = "static/notes/notesNonHandwritten.pdf"  # Specify the name of the output file
+    print(url)
 
-        gdown.download(url, output_file, quiet=False)
-        
-        llm = setUpLangChainWithGemini()
-        pdf_loader = PyPDFLoader("/static/notes/notesNonHandwritten.pdf")
-        pages = pdf_loader.load_and_split()
-        # print(pages[3].page_content)
-        text_splitter = RecursiveCharacterTextSplitter(chunk_size=10000, chunk_overlap=1000)
-        context = "\n\n".join(str(p.page_content) for p in pages)
-        texts = text_splitter.split_text(context)
+    gdown.download(url, output_file, quiet=False)
+    
+    llm = setUpLangChainWithGemini()
+    pdf_loader = PyPDFLoader(output_file)
+    pages = pdf_loader.load_and_split()
+    # print(pages[3].page_content)
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=10000, chunk_overlap=1000)
+    context = "\n\n".join(str(p.page_content) for p in pages)
+    texts = text_splitter.split_text(context)
 
-        embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001",google_api_key=api_key)
-        vector_index = Chroma.from_texts(texts, embeddings).as_retriever(search_kwargs={"k":3})
-        vector_index.save(chroma_db_path)
-        
-        
-        template = """
-            Use the following pieces of context to answer the question at the end. If you don't know the answer, just say that you don't know, don't try to make up an answer. Keep the answer as concise as possible.
-            {context}
-            Question: {question}
-            Helpful Answer:
-        
-        """
-        QA_CHAIN_PROMPT = PromptTemplate.from_template(template)
-        qa_chain = RetrievalQA.from_chain_type(
-            llm,
-            retriever=vector_index,
-            # return_source_documents=True,
-            chain_type_kwargs={"prompt": QA_CHAIN_PROMPT}
-        )
-        result = qa_chain({"query": question})
-        return result["result"]
+    embeddings = GoogleGenerativeAIEmbeddings(model = "models/embedding-001")
+    vector_store = FAISS.from_texts(texts, embedding=embeddings)
+    vector_store.save_local("faiss_index")
+    embeddings = GoogleGenerativeAIEmbeddings(model = "models/embedding-001")
+    
+    new_db = FAISS.load_local("faiss_index", embeddings, allow_dangerous_deserialization=True)
+    docs = new_db.similarity_search(question)
+    
+    prompt_template = """
+    Answer the question as detailed as possible from the provided context, make sure to provide all the details, if the answer is not in
+    provided context just say, "answer is not available in the context", don't provide the wrong answer\n\n
+    Context:\n {context}?\n
+    Question: \n{question}\n
+
+    Answer:
+    """
+
+    model = ChatGoogleGenerativeAI(model="gemini-pro",
+                             temperature=0.3)
+
+    prompt = PromptTemplate(template = prompt_template, input_variables = ["context", "question"])
+    
+    chain = load_qa_chain(model, chain_type="stuff", prompt=prompt)
+
+
+    
+    response = chain(
+        {"input_documents":docs, "question": question}
+        , return_only_outputs=True)
+
+    print(response)
+    # st.write("Reply: ", response["output_text"])
+    return response
 
 
 
 def  VideoTranscriptEmbeddingsAndQuery(uuid, question):
-    
-    
-    chroma_db_path = "chroma_db_qnabotVideo.pkl"
-    llm = setUpLangChainWithGemini()
-    
-    
-    if os.path.exists(chroma_db_path):
-    # Load the existing Chroma instance
-        vector_index = Chroma.load(chroma_db_path)
-        
-        template = """
-        Use the following pieces of context to answer the question at the end. If you don't know the answer, just say that you don't know, don't try to make up an answer. Keep the answer as concise as possible.
-        {context}
-        Question: {question}
-        Helpful Answer:
 
-        """
-        QA_CHAIN_PROMPT = PromptTemplate.from_template(template)
-        qa_chain = RetrievalQA.from_chain_type(
-            llm,
-            retriever=vector_index,
-            # return_source_documents=True,
-            chain_type_kwargs={"prompt": QA_CHAIN_PROMPT}
-        )
-        result = qa_chain({"query": question})
-        return result["result"]
+
     
-    else:
-        #condiiton t check if vector database exists or not then only proceed with following
+    # if os.path.exists('static/video-mp4-transcribed.txt'):
         url = "https://drive.google.com/uc?id={}".format(uuid)
-        output_file = "static/docs/notesHandwritten.pdf"  # Specify the name of the output file
+        output_file = "static/video.mp4"  # Specify the name of the output file
         print(url)
 
+        
         gdown.download(url, output_file, quiet=False)
         audio_model = whisper.load_model('base.en')
         text = audio_model.transcribe("static/video.mp4", language='en')
         result = text["text"]
+        print(result)
+        model = ChatGoogleGenerativeAI(model="gemini-pro",
+                                temperature=0.3,convert_system_message_to_human=True)
+        # with open('static/video-mp4-transcribed.txt', 'rb') as f:
+            # result =  pickle.load(f)
+        text_splitter = RecursiveCharacterTextSplitter(chunk_size=10000, chunk_overlap=1000)
+        chunks = text_splitter.split_text(result)
+        embeddings = GoogleGenerativeAIEmbeddings(model = "models/embedding-001")
+        vector_store = FAISS.from_texts(chunks, embedding=embeddings)
+        vector_store.save_local("faiss_index")
         
-        llm = setUpLangChainWithGemini()
-        # pdf_loader = PyPDFLoader("/static/notes/notesNonHandwritten.pdf")
-        # pages = pdf_loader.load_and_split()
-        # print(pages[3].page_content)
-        # text_splitter = RecursiveCharacterTextSplitter(chunk_size=10000, chunk_overlap=1000)
-        # context = "\n\n".join(str(p.page_content) for p in pages)
-        # texts = text_splitter.split_text(context)
+        new_db = FAISS.load_local("faiss_index", embeddings, allow_dangerous_deserialization=True)
+        docs = new_db.similarity_search(question)
+        
+        prompt_template = """
+        Answer the question as detailed as possible from the provided context, make sure to provide all the details, if the answer is not in
+        provided context just say, "answer is not available in the context", don't provide the wrong answer\n\n
+        Context:\n {context}?\n
+        Question: \n{question}\n
 
-        embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001",google_api_key=api_key)
-        vector_index = Chroma.from_texts(result, embeddings).as_retriever(search_kwargs={"k":2})
-        vector_index.save(chroma_db_path)
-        
-        template = """
-            Use the following pieces of context to answer the question at the end. If you don't know the answer, just say that you don't know, don't try to make up an answer. Keep the answer as concise as possible.
-            {context}
-            Question: {question}
-            Helpful Answer:
-        
+        Answer:
         """
-        QA_CHAIN_PROMPT = PromptTemplate.from_template(template)
-        qa_chain = RetrievalQA.from_chain_type(
-            llm,
-            retriever=vector_index,
-            # return_source_documents=True,
-            chain_type_kwargs={"prompt": QA_CHAIN_PROMPT}
-        )
-        result = qa_chain({"query": question})
-        return result["result"]
+
+
+
+        prompt = PromptTemplate(template = prompt_template, input_variables = ["context", "question"])
+        
+        chain = load_qa_chain(model, chain_type="stuff", prompt=prompt)
+
+
+        
+        response = chain(
+            {"input_documents":docs, "question": question}
+            , return_only_outputs=True)
+
+        print(response)
+        # st.write("Reply: ", response["output_text"])
+        return response
+
 
     
-@app.route('/qnabotVideo', methods=['POST'])
+@app.route('/qnabotVideo', methods=['GET','POST'])
 def ragBasedQnABotVideo():
     
+    full_path = request.full_path
+    query_parameter = full_path.split('query=')[1]
+    uuid = query_parameter.split('&')[0].split("/")[5]
+    query = ' '.join(full_path.split('&')[1].split("%20"))
+    # num = int(full_path.split('&')[2])
+    # UUID = uuid
+    print(query)
+    # print(num)
+    # data = request.get_json()
     # full_path = request.full_path
-    # query_parameter = full_path.split('query=')[1]
-    # uuid = query_parameter.split('&')[0].split("/")[5]
-    data = request.get_json()
-    question = data.get('message')
-    uuid = data.get('url').split("/")[5]
+    # print(full_path)
+    # question = full_path.get('message')
+    # uuid = full_path.get('url').split("/")[5]
     # question = query_parameter.split('&')[1]
-    answer = VideoTranscriptEmbeddingsAndQuery(uuid, question)
+    answer = VideoTranscriptEmbeddingsAndQuery(uuid, query)
     return answer
     
     
