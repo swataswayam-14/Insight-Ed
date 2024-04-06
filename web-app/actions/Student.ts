@@ -65,27 +65,45 @@ export async function RegisterCourse(subjectId:string, studentemail:string) {
     console.log('hit');
     
     try {
-        const student = await client.student.findUnique({
+        const subject = await client.subject.findUnique({
             where:{
-                email:studentemail
+                id:subjectId
+            }, include:{
+                teacher:true
             }
         })
-        console.log(student);
-        
-        if(student){
-            const studentid = student.id;
-            const register = await client.studentsubject.create({
-                data:{
-                    studentid:studentid,
-                    subjectid:subjectId
+        console.log(subject?.teacher.id);
+        if(subject){
+            const student = await client.student.findUnique({
+                where:{
+                    email:studentemail
                 }
             })
-            if(register){
-                console.log('Registration id ' + register.id);
-                return student.id;
-                
+            console.log(student);
+            
+            if(student){
+                const studentid = student.id;
+                const register = await client.studentsubject.create({
+                    data:{
+                        studentid:studentid,
+                        subjectid:subjectId
+                    }
+                })
+                const teacherStudent = await client.studentteacher.create({
+                    data:{
+                        studentid:student.id,
+                        teacherid:subject.teacher.id
+                    }
+                })
+                if(register && teacherStudent){
+                    console.log('Registration id ' + register.id);
+    
+                    return student.id;
+                    
+                }
             }
         }
+        
     } catch (error) {
         console.log(error);
         return -1;
@@ -106,3 +124,58 @@ export async function YourCourses(studentid:string) {
 
     return subjects;
 }
+
+
+
+export async function getScheduledLectures(studentId: string) {
+    const studentTeachers = await client.studentteacher.findMany({
+      where: {
+        studentid: studentId,
+      },
+      select: {
+        teacherid: true,
+      },
+    });
+  
+    const teacherIds = studentTeachers.map((st) => st.teacherid);
+  
+    const today = new Date().toLocaleDateString('en-GB') // Get today's date
+  
+    const scheduledLectures = await client.lecture.findMany({
+      where: {
+        teacherid: {
+          in: teacherIds,
+        },
+        date: today,
+      },
+    });
+
+    const teachers = await client.teacher.findMany({
+        where: {
+            id: {
+                in: teacherIds,
+            },
+        },
+        select: {
+            firstname: true,
+            lastname: true,
+            id:true
+        },
+    });
+
+    const scheduledLecturesWithTeachers = scheduledLectures.map((lecture) => {
+        const teacher = teachers.find((t) => t.id === lecture.teacherid);
+        const teacherInfo = teacher
+            ? { firstname: teacher.firstname, lastname: teacher.lastname }
+            : { firstname: 'Unknown', lastname: 'Teacher' };
+        return {
+            ...lecture,
+            teacher: teacherInfo
+        };
+    });
+
+    console.log(scheduledLectures);
+    
+  
+    return scheduledLecturesWithTeachers;
+  }

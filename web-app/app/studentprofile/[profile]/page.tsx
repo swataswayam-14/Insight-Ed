@@ -44,6 +44,9 @@ export default function StudentProfileComp({params}:any) {
         <button className="bg-white hover:text-lg hover:bg-blue-200 text-black p-4 border border-emerald-300 rounded-md mt-4" onClick={() => {
             router.push('/profile/student/allcourses');
         }}>Browse Courses</button>
+        <button className="bg-white hover:text-lg hover:bg-blue-200 text-black p-4 border border-emerald-300 rounded-md mt-4" onClick={() => {
+            router.push(`/studentprofile/scheduledlectures/${id}`);
+        }}>View Scheduled lectures</button>
 
       </div>
     );
