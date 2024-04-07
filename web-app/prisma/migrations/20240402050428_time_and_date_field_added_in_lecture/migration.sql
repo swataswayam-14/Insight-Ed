@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Lecture" ADD COLUMN     "date" TEXT NOT NULL DEFAULT '',
+ADD COLUMN     "time" TEXT NOT NULL DEFAULT '';

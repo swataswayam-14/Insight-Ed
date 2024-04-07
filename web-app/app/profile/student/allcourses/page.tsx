@@ -40,17 +40,22 @@ export default function AllCourses(){
     );
 
     return (
-        <div >
-             <input
+        <div>
+        <input
                 type="text"
                 placeholder="Search by subject title"
                 value={searchQuery}
                 className="text-black ml-96 p-4 rounded-xl"
                 onChange={(e) => setSearchQuery(e.target.value)}
             />
+        <div className="flex flex-wrap">
+             
             {filteredSubjects.map((subject) => (
-                <Subject key={subject.id} title={subject.title} description={subject.description} subjectid={subject.id} teacherName={subject.teacherName} />
+                <div className="w-1/3 p-4">
+                    <Subject  key={subject.id} title={subject.title} description={subject.description} subjectid={subject.id} teacherName={subject.teacherName} />
+                </div>
             ))}
+        </div>
         </div>
     );
 }

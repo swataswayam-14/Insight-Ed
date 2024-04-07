@@ -36,7 +36,7 @@ export async function TotalSubject(teacherId:string) {
             teacherid:teacherId
         }
     })
-    console.log(subjects);
+    //console.log(subjects);
     
     // if(subjects){
     //     return subjects.map((sub)=>sub);
@@ -70,18 +70,27 @@ export async function addSubject(title:string, description:string, teacherId:str
     }
 }
 
-export async function addLecture(title:string, link:string, teacherId:string, subjectId:string) {
-    const lecture = await client.lecture.create({
-        data:{
-            subjectid:subjectId,
-            teacherid:teacherId,
-            title:title,
-            link:link
+export async function addLecture(title:string, link:string, teacherEmail:string, subjectId:string, time:string, date:string) {
+    const teacher = await client.teacher.findUnique({
+        where:{
+            email:teacherEmail
         }
     })
-    if(lecture){
-        console.log(lecture.title +' is created');
-        
+    if(teacher){
+        const lecture = await client.lecture.create({
+            data:{
+                subjectid:subjectId,
+                teacherid:teacher.id,
+                title:title,
+                link:link, 
+                time:time,
+                date:date
+            }
+        })
+        if(lecture){
+            console.log(lecture.title +' is created');
+            return teacher.id
+        }
     }
 }
 
@@ -118,4 +127,22 @@ export default async function getAllLectures(subjectid:any){
 
     return lectures
 
+}
+
+export async function ScheduledLectures(teacherid: string) {
+    try {
+        const currentDate = new Date().toLocaleDateString('en-GB'); // Get current date in dd/mm/yyyy format
+        const lectures = await client.lecture.findMany({
+            where: {
+                teacherid: teacherid,
+                isCompleted: false,
+                date: currentDate
+            }
+        });
+        console.log(lectures);
+        
+        return lectures;
+    } catch (error) {
+        return [];
+    }
 }

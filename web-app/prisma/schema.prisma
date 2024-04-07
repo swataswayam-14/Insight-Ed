@@ -46,6 +46,9 @@ model Lecture{
   teacherid String
   title String
   link String
+  time String @default("")
+  date String @default("")
+  isCompleted Boolean @default(false)
   subject Subject @relation(fields: [subjectid], references: [id])
   teacher Teacher @relation(fields: [teacherid],references: [id])
   weakconcept WeakConcept[]
