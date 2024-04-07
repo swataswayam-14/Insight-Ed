@@ -422,24 +422,31 @@ def speechRecognition():
     timecount = []
     temp =  []
     # for i in data
+    print(len(data[0]))
     while(count + 1 < len(data[0])):
         timestamp1 = data[0][count][0]
         timestamp2 = data[0][count + 1][0]
-        print(timestamp1)
-        print(timestamp2)
-        video = mp.VideoFileClip("static/video.mp4").subclip(timestamp1, timestamp2)
+        print(count)
+        if(timestamp1 != timestamp2):
+            # print(timestamp1)
+            # print(timestamp2)
+            video = mp.VideoFileClip("static/video.mp4").subclip(timestamp1, timestamp2)
 
-        video.write_videofile("static/video_clipped_{}.mp4".format(count), codec='libx264', audio_codec='aac')
+            video.write_videofile("static/video_clipped_{}.mp4".format(count), codec='libx264', audio_codec='aac')
+            
+            audio_model = whisper.load_model('base.en')
+            # option = whisper.DecodingOptions(language='en')
+            text = audio_model.transcribe("static/video_clipped_{}.mp4".format(count))
+
+            # topics.append()
+            timecount.append((timestamp1, timestamp2, keywords(text['text'])['keywords']))
         
-        audio_model = whisper.load_model('base.en')
-        option = whisper.DecodingOptions(language='en')
-        text = audio_model.transcribe("static/video_clipped_{}.mp4".format(count))
 
-        topics.append(keywords(text['text']))
-        timecount.append((timestamp1, timestamp2))
-    
-        temp.append((timecount, topics))
+            
         count += 1
+    # print(temp)
+    temp.append(timecount)
+    print(temp)
     final= {}
 
     final['result'] = temp
@@ -735,7 +742,7 @@ def keywords(text):
     final['keywords'] = fetched.split("\n")
     # links = fetchRecommendations(fetched)
     # final['recommendations']  = links
-    print(final)
+    # print(final)
     return final
 
 
@@ -809,98 +816,108 @@ def page_to_image(page):
 def ragBasedQnABotHandwritten():
     
     
-    chroma_db_path = "chroma_db_qnabotHandwritten.pkl"
-    llm_vision = setUpLangChainWithGeminiVision()
-    llm = setUpLangChainWithGemini()
-    
-    
-    if os.path.exists(chroma_db_path):
-    # Load the existing Chroma instance
-        vector_index = Chroma.load(chroma_db_path)
-        
-        template = """
-        Use the following pieces of context to answer the question at the end. If you don't know the answer, just say that you don't know, don't try to make up an answer. Keep the answer as concise as possible.
-        {context}
-        Question: {question}
-        Helpful Answer:
+    # chroma_db_path = "chroma_db_qnabotHandwritten.pkl"
+    # llm_vision = setUpLangChainWithGeminiVision()
+    # llm = setUpLangChainWithGemini()
+    model = ChatGoogleGenerativeAI(model="gemini-pro",
+                                temperature=0.3,convert_system_message_to_human=True)
+    full_path = request.full_path
 
-        """
-        QA_CHAIN_PROMPT = PromptTemplate.from_template(template)
-        qa_chain = RetrievalQA.from_chain_type(
-            llm,
-            retriever=vector_index,
-            # return_source_documents=True,
-            chain_type_kwargs={"prompt": QA_CHAIN_PROMPT}
-        )
-        result = qa_chain({"query": question})
-        return result["result"]
-    
+    directory = "static/notes/"
+    directory2 = "static/notes/Handwriten/images"
+    if os.path.exists(directory):
+        shutil.rmtree(directory)
+        os.makedirs(directory)
     else:
+        os.makedirs(directory)
         
-        full_path = request.full_path
+    
+    if os.path.exists(directory2):
+        shutil.rmtree(directory2)
+        os.makedirs(directory2)
+    else:
+        os.makedirs(directory2)
+        
+    
+    query_parameter = full_path.split('query=')[1]
+    uuid = query_parameter.split('&')[0].split("/")[5]
+    question = query_parameter.split('&')[1]
+    print(uuid)
+        # full_path = request.full_path
+    # query_parameter = full_path.split('query=')[1]
+    # # uuid = query_parameter.split('&')[0].split("/")[5]
+    # data = request.get_json()
+    # question = data.get('message')
+    # uuid = data.get('url').split("/")[5]
+    url = "https://drive.google.com/uc?id={}".format(uuid)
+    output_file = "static/notes/notesNonHandwritten.pdf"  # Specify the name of the output file
+    print(url)
 
-        directory = "static/notes/"
-        directory2 = "static/notes/Handwriten/images"
-        if os.path.exists(directory):
-            shutil.rmtree(directory)
-            os.makedirs(directory)
-        else:
-            os.makedirs(directory)
-            
-        
-        if os.path.exists(directory2):
-            shutil.rmtree(directory2)
-            os.makedirs(directory2)
-        else:
-            os.makedirs(directory2)
-            
-        
-        # query_parameter = full_path.split('query=')[1]
-        # uuid = query_parameter.split('&')[0].split("/")[5]
-        # question = query_parameter.split('&')[1]
-        # print(uuid)
-         # full_path = request.full_path
-        # query_parameter = full_path.split('query=')[1]
-        # uuid = query_parameter.split('&')[0].split("/")[5]
-        data = request.get_json()
-        question = data.get('message')
-        uuid = data.get('url').split("/")[5]
-        url = "https://drive.google.com/uc?id={}".format(uuid)
-        output_file = "static/notes/notesHandwritten.pdf"  # Specify the name of the output file
-        print(url)
+    gdown.download(url, output_file, quiet=False)
+    
+    llm = setUpLangChainWithGemini()
+    # pdf_loader = PyPDFLoader("/static/notes/notesHandwritten.pdf")
+    # pages = pdf_loader.load_and_split()
+    # print(pages[3].page_content)
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=10000, chunk_overlap=1000)
+    # context = "\n\n".join(str(p.page_content) for p in pages)
+    # texts = text_splitter.split_text(context)
+    pdf_path = "static/notes/notesNonHandwritten.pdf"
+    texts = separate_pdf_and_ocr(pdf_path)
+    # text_splitter = RecursiveCharacterTextSplitter(chunk_size=10000, chunk_overlap=1000)
+    chunks = text_splitter.split_text(texts[0])
+    embeddings = GoogleGenerativeAIEmbeddings(model = "models/embedding-001")
+    vector_store = FAISS.from_texts(chunks, embedding=embeddings)
+    vector_store.save_local("faiss_index")
+    
+    new_db = FAISS.load_local("faiss_index", embeddings, allow_dangerous_deserialization=True)
+    docs = new_db.similarity_search(question)
+    
+    prompt_template = """
+    Answer the question as detailed as possible from the provided context, make sure to provide all the details, if the answer is not in
+    provided context just say, "answer is not available in the context", don't provide the wrong answer\n\n
+    Context:\n {context}?\n
+    Question: \n{question}\n
 
-        gdown.download(url, output_file, quiet=False)
-        
-        llm = setUpLangChainWithGemini()
-        # pdf_loader = PyPDFLoader("/static/notes/notesHandwritten.pdf")
-        # pages = pdf_loader.load_and_split()
-        # print(pages[3].page_content)
-        # text_splitter = RecursiveCharacterTextSplitter(chunk_size=10000, chunk_overlap=1000)
-        # context = "\n\n".join(str(p.page_content) for p in pages)
-        # texts = text_splitter.split_text(context)
-        pdf_path = "static/notes/notesHandwritten.pdf"
-        texts = separate_pdf_and_ocr(pdf_path)
-        embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001",google_api_key=api_key)
-        vector_index = Chroma.from_texts(texts, embeddings).as_retriever(search_kwargs={"k":3})
-        vector_index.save(chroma_db_path)
-        
-        
-        template = """
-            Use the following pieces of context to answer the question at the end. If you don't know the answer, just say that you don't know, don't try to make up an answer. Keep the answer as concise as possible.
-            {context}
-            Question: {question}
-            Helpful Answer:
-        
-        """
-        QA_CHAIN_PROMPT = PromptTemplate.from_template(template)
-        qa_chain = RetrievalQA.from_chain_type(
-            llm,
-            retriever=vector_index,
-            # return_source_documents=True,
-            chain_type_kwargs={"prompt": QA_CHAIN_PROMPT}
-        )
-        result = qa_chain({"query": question})
-        return result["result"]
+    Answer:
+    """
+
+
+
+    prompt = PromptTemplate(template = prompt_template, input_variables = ["context", "question"])
+    
+    chain = load_qa_chain(model, chain_type="stuff", prompt=prompt)
+
+
+    
+    response = chain(
+        {"input_documents":docs, "question": question}
+        , return_only_outputs=True)
+
+    print(response)
+    # st.write("Reply: ", response["output_text"])
+    return response
+    # embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001",google_api_key=api_key)
+    # vector_index = Chroma.from_texts(texts, embeddings).as_retriever(search_kwargs={"k":3})
+    # vector_index.save(chroma_db_path)
+    
+    
+    # template = """
+    #     Use the following pieces of context to answer the question at the end. If you don't know the answer, just say that you don't know, don't try to make up an answer. Keep the answer as concise as possible.
+    #     {context}
+    #     Question: {question}
+    #     Helpful Answer:
+    
+    # """
+    # QA_CHAIN_PROMPT = PromptTemplate.from_template(template)
+    # qa_chain = RetrievalQA.from_chain_type(
+    #     llm,
+    #     retriever=vector_index,
+    #     # return_source_documents=True,
+    #     chain_type_kwargs={"prompt": QA_CHAIN_PROMPT}
+    # )
+    # result = qa_chain({"query": question})
+    # return result["result"]
     
     
    
@@ -943,7 +960,6 @@ def ragBasedQnABotNonHandwritten():
     embeddings = GoogleGenerativeAIEmbeddings(model = "models/embedding-001")
     vector_store = FAISS.from_texts(texts, embedding=embeddings)
     vector_store.save_local("faiss_index")
-    embeddings = GoogleGenerativeAIEmbeddings(model = "models/embedding-001")
     
     new_db = FAISS.load_local("faiss_index", embeddings, allow_dangerous_deserialization=True)
     docs = new_db.similarity_search(question)
