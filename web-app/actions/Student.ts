@@ -179,3 +179,23 @@ export async function getScheduledLectures(studentId: string) {
   
     return scheduledLecturesWithTeachers;
   }
+
+  export async function getVideoLinkFromLectureId(lectureid:string){
+    try {
+      const lecture = await client.lecture.findUnique({
+        where:{
+          id:lectureid
+        }
+      })
+      if(lecture){
+        console.log("Lecture found:", lecture);
+        return lecture.link
+      } else {
+        console.log("Lecture not found.");
+        return ""
+      }
+    } catch (error) {
+      console.log("Error finding lecture:", error);
+      return ""
+    }
+  }

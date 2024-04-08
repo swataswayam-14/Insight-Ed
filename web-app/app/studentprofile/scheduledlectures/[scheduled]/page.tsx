@@ -9,7 +9,7 @@ export default function Scheduled({params}:any){
     useEffect(() => {
       const fetchScheduledLectures = async () => {
         try {
-          const lectures = await getScheduledLectures(params.scheduled);
+          const lectures:any = await getScheduledLectures(params.scheduled);
           setScheduledLectures(lectures);
         } catch (error) {
           console.error('Error fetching scheduled lectures:', error);
