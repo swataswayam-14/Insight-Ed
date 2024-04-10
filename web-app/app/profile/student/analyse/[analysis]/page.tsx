@@ -50,7 +50,7 @@ export default function analysis({params}:any) {
             'connection': 'close'
           };
       
-          const response = await axios.get(`https://insight-ed-server-latest-pje3eb6rka-uc.a.run.app/speechAndKeywordsFullOneShot?query=${videoLink}`, { headers });
+          const response = await axios.get(`http://localhost:8080/speechAndKeywordsFullOneShot?query=${videoLink}`, { headers });
           console.log('Response status:', response.status);
           console.log('Response data:', response.data);
           setData(response.data.result);

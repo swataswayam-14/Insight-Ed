@@ -59,7 +59,7 @@ export default function question({params}:any){
         ////https://drive.google.com/file/d/1ht1X246gT9t8U92t5p3UIYGRbQSRBx94/view?usp=sharing&20
           
         //one line difference between one retrieval for QA and Multi-step Approach for QA
-        const response = await axios.get(`https://insight-ed-server-latest-pje3eb6rka-uc.a.run.app/qnabotNonHandwritten?query=https://drive.google.com/file/d/1OxGCJw5aEBzdkn4NoAFPzm5aFpL3luuO/view?usp=sharing&${question}`,{ headers });
+        const response = await axios.get(`http://localhost:8080/qnabotNonHandwritten?query=https://drive.google.com/file/d/1OxGCJw5aEBzdkn4NoAFPzm5aFpL3luuO/view?usp=sharing&${question}`,{ headers });
         console.log('hit 2');
         
         const data = await response.data

@@ -6,7 +6,7 @@ import { useState } from "react";
 import { getVideoLinkFromLectureId } from "@/actions/Student";
 
 export default function doubt({params}:any){
-
+    
 
     console.log(params.doubt);
     const [question , setQuestion] = useState("");
@@ -15,6 +15,7 @@ export default function doubt({params}:any){
     const getVideoLink = async()=>{
         try {
             let videoLink:any = await getVideoLinkFromLectureId(params.doubt);
+            //the videoLink is showing undefined , fix this problem
             if(videoLink != ""){
                 console.log(videoLink);
                 
@@ -57,7 +58,7 @@ export default function doubt({params}:any){
         console.log('hit 1');
         ////https://drive.google.com/file/d/1ht1X246gT9t8U92t5p3UIYGRbQSRBx94/view?usp=sharing&20
           
-        const response = await axios.get(`https://insight-ed-server-latest-pje3eb6rka-uc.a.run.app/qnabotVideo?query=https://drive.google.com/file/d/1ht1X246gT9t8U92t5p3UIYGRbQSRBx94/view?usp=sharing&${question}`,{ headers });
+        const response = await axios.get(`http://localhost:8080/qnabotVideo?query=https://drive.google.com/file/d/1ht1X246gT9t8U92t5p3UIYGRbQSRBx94/view?usp=sharing&${question}`,{ headers });
         console.log('hit 2');
         
         const data = await response.data
@@ -75,7 +76,6 @@ export default function doubt({params}:any){
       
       <button className="px-5 py-2 bg-green-600 text-white rounded-lg cursor-pointer transition duration-300 hover:bg-green-500" onClick={(event) => {
         event.preventDefault();
-        //getAnswer()
         getVideoLink();
       }}>Submit</button>
   
