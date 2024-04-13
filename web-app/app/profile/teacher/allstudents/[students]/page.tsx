@@ -1,6 +1,7 @@
 "use client"
 import { findAllStudents } from "@/actions/TeacherProfile";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 interface Students{
     id:string;
@@ -14,6 +15,7 @@ interface Students{
 }
 
 export default function allStudents({params}:any){
+    const Router = useRouter()
     //console.log(params);
     
     const [students , setStudents] = useState<Students[]>([]);
@@ -44,7 +46,9 @@ export default function allStudents({params}:any){
                 <div>
                     <h2>{student.firstname} {student.lastname}</h2>
                     <p>{student.username}</p>
-                    <button className="bg-blue-600 rounded-xl text-lg p-2">Analyse</button>
+                    <button onClick={()=>{
+                        Router.push(`/profile/teacher/student/${student.id}`)
+                    }} className="bg-blue-600 rounded-xl text-lg p-2">Analyse</button>
                 </div>
             </li>
             ))}
