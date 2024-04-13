@@ -10,8 +10,10 @@ export default function Register({params}:any){
 
     async function Register() {
         const studentId = await RegisterCourse(params.register, studentEmail)
-        if(studentId != -1){
+        if(studentId != ""){
           Router.push(`/studentprofile/${studentId}`)
+        }else{
+          alert("You have already registered in this course")
         }
     }
 

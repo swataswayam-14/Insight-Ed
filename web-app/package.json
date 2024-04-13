@@ -16,7 +16,8 @@
     "prisma": "^5.11.0",
     "react": "^18",
     "react-dom": "^18",
-    "react-router-dom": "^6.22.3"
+    "react-router-dom": "^6.22.3",
+    "tailwind-styled-components": "^2.2.0"
   },
   "devDependencies": {
     "@types/node": "^20",

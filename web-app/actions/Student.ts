@@ -72,7 +72,7 @@ export async function RegisterCourse(subjectId:string, studentemail:string) {
                 teacher:true
             }
         })
-        console.log(subject?.teacher.id);
+        //console.log(subject?.teacher.id);
         if(subject){
             const student = await client.student.findUnique({
                 where:{
@@ -83,23 +83,33 @@ export async function RegisterCourse(subjectId:string, studentemail:string) {
             
             if(student){
                 const studentid = student.id;
-                const register = await client.studentsubject.create({
-                    data:{
-                        studentid:studentid,
-                        subjectid:subjectId
+                const isRegistered = await client.studentsubject.findMany({
+                    where:{
+                        subjectid:subjectId,
+                        studentid:studentid
                     }
                 })
-                const teacherStudent = await client.studentteacher.create({
-                    data:{
-                        studentid:student.id,
-                        teacherid:subject.teacher.id
+                if(isRegistered){
+                    return "";
+                }else{
+                    const register = await client.studentsubject.create({
+                        data:{
+                            studentid:studentid,
+                            subjectid:subjectId
+                        }
+                    })
+                    const teacherStudent = await client.studentteacher.create({
+                        data:{
+                            studentid:student.id,
+                            teacherid:subject.teacher.id
+                        }
+                    })
+                    if(register && teacherStudent){
+                        console.log('Registration id ' + register.id);
+        
+                        return student.id;
+                        
                     }
-                })
-                if(register && teacherStudent){
-                    console.log('Registration id ' + register.id);
-    
-                    return student.id;
-                    
                 }
             }
         }
