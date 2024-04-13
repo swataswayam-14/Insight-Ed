@@ -10,11 +10,11 @@ Our solution tries to bridge the knowledge gap between a teacher and a student i
 
 ## Tech Stack
 
-**Client:** HTML, React.js
+**Client:** HTML, Next.js
 
-**Backend:** Flask, Python, Keras, Tensorflow, Gemini API, Whisper API, HuggingFace Open-Source Models (EmotionLLM), MTCNN
+**Backend:** Flask, Python, Keras, Tensorflow, Gemini API, Whisper API, HuggingFace Open-Source Models (EmotionLLM), MTCNN , Next.js, TypeScript
 
-**Storage:** MongoDB, ChromaDB
+**Storage:** PostgreSQL, ChromaDB
 
 **Other Tools:** GCP (Cloud Run), Docker, Render
 
@@ -65,7 +65,7 @@ Docker
 Pull the server image from DockerHub
 
 ```bash
-  docker pull yuvrajsingh9886/insight-ed-server
+  docker pull yuvrajsingh9886/insight-ed-server:v1.0
 ```
 
 Run the server image
