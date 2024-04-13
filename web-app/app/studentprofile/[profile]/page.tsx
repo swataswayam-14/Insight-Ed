@@ -1,6 +1,6 @@
 "use client"
 import React, { useEffect, useState } from 'react';
-import { getStudentDetails } from '@/actions/Student';
+import { getScheduledLectures, getStudentDetails } from '@/actions/Student';
 import { useRouter } from 'next/navigation';
 export default function StudentProfileComp({params}:any) {
     const [studentInfo, setStudentInfo] = useState<{ username: string, email: string, id:string } | undefined>(undefined);
@@ -24,9 +24,19 @@ export default function StudentProfileComp({params}:any) {
                 console.error('Error fetching Student info:', error);
             }
         };
-
+        const getScheduledlecture = async ()=>{
+          try {
+            const lectures = await getScheduledLectures(params.profile)
+            if(lectures.length != 0){
+              alert(`You have ${lectures.length} lectures for today`)
+            }
+          } catch (error) {
+            console.log(error);
+          }
+        }
         fetchStudentInfo();
-    }, []);
+        getScheduledlecture();
+    }, [params.profile]);
 
     return (
         <div className="bg-gray-100 p-4 rounded-lg shadow-md text-center max-w-md mx-auto mt-40">

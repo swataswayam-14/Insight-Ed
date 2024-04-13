@@ -184,7 +184,7 @@ export async function getScheduledLectures(studentId: string) {
         };
     });
 
-    console.log(scheduledLectures);
+    //console.log(scheduledLectures);
     
   
     return scheduledLecturesWithTeachers;
