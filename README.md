@@ -65,7 +65,7 @@ Docker
 Pull the server image from DockerHub
 
 ```bash
-  docker pull yuvrajsingh9886/insight-ed-server
+  docker pull yuvrajsingh9886/insight-ed-server:v1.0
 ```
 
 Run the server image
