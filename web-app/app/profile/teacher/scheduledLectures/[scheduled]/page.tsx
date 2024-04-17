@@ -14,21 +14,22 @@ export default function Lecture({params}:any){
         getLectures()
     },[])
     return (
-        <div className="p-4">
-            <h1 className="text-3xl font-bold mb-4">All Lectures</h1>
-            <ul>
-                {lectures.map((lecture: any) => (
-                    <div key={lecture.id} className="bg-white shadow-md rounded-lg p-4 mb-4">
-                        <li>
-                            <h3 className="text-xl font-semibold mb-2 text-black">{lecture.title}</h3>
-                            <p className="text-gray-600">Date: {lecture.date}</p>
-                            <p className="text-gray-600">Time: {lecture.time}</p>
-                            <p className="text-blue-500">Link: <a href={lecture.link} target="_blank" rel="noopener noreferrer">{lecture.link}</a></p>
-                        </li>
-                        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-2">Take class</button>
-                    </div>
-                ))}
-            </ul>
-        </div>
+<div className="min-h-screen bg-gray-100 p-8">
+  <h1 className="text-4xl font-bold text-center text-gray-800 mb-10">All Lectures</h1>
+  <div className="container mx-auto">
+    <ul className="space-y-6">
+      {lectures.map((lecture: any) => (
+        <li key={lecture.id} className="bg-white shadow-lg rounded-lg p-6">
+          <h3 className="text-2xl font-semibold mb-3 text-gray-900">{lecture.title}</h3>
+          <p className="text-md text-gray-700">Date: {lecture.date}</p>
+          <p className="text-md text-gray-700">Time: {lecture.time}</p>
+          <p className="text-md text-blue-600 hover:text-blue-700">Link: <a href={lecture.link} target="_blank" rel="noopener noreferrer">{lecture.link}</a></p>
+          <button className="mt-4 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded transition duration-300 ease-in-out transform hover:-translate-y-1">Take class</button>
+        </li>
+      ))}
+    </ul>
+  </div>
+</div>
+
     );
 }

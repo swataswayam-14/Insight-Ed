@@ -28,7 +28,7 @@ export default function StudentProfileComp({params}:any) {
           try {
             const lectures = await getScheduledLectures(params.profile)
             if(lectures.length != 0){
-              alert(`You have ${lectures.length} lectures for today`)
+              //alert(`You have ${lectures.length} lectures for today`)
             }
           } catch (error) {
             console.log(error);
@@ -39,25 +39,27 @@ export default function StudentProfileComp({params}:any) {
     }, [params.profile]);
 
     return (
-        <div className="bg-gray-100 p-4 rounded-lg shadow-md text-center max-w-md mx-auto mt-40">
-        {studentInfo ? (
-          <div>
-            <h2 className="text-2xl font-bold text-gray-800 mb-2">Username: {studentInfo.username}</h2>
-            <p className="text-lg text-gray-600">Email: {studentInfo.email}</p>
-          </div>
-        ) : (
-          <p className="text-lg text-gray-600">Loading student info...</p>
-        )}
-        <button className="bg-white hover:text-lg hover:bg-blue-200 text-black p-4 border border-emerald-300 rounded-md mt-4 mr-2" onClick={() => {
-          router.push(`/profile/student/yourcourses/${id}`);
-        }}>Your Courses</button>
-        <button className="bg-white hover:text-lg hover:bg-blue-200 text-black p-4 border border-emerald-300 rounded-md mt-4" onClick={() => {
-            router.push('/profile/student/allcourses');
-        }}>Browse Courses</button>
-        <button className="bg-white hover:text-lg hover:bg-blue-200 text-black p-4 border border-emerald-300 rounded-md mt-4" onClick={() => {
-            router.push(`/studentprofile/scheduledlectures/${id}`);
-        }}>View Scheduled lectures</button>
+<div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-tl from-green-300 via-green-200 to-green-100">
+    {studentInfo ? (
+        <div className="w-full max-w-6xl p-10 rounded-xl shadow-2xl bg-white text-center">
+            <h2 className="text-4xl font-extrabold text-gray-900 mb-6">Username: {studentInfo.username}</h2>
+            <p className="text-2xl text-gray-800">Email: {studentInfo.email}</p>
+            <div className="flex flex-wrap justify-center gap-6 mt-8">
+                <button className="bg-teal-500 hover:bg-teal-600 text-white text-xl px-8 py-3 rounded-lg shadow-md transition duration-300" onClick={() => {
+                    router.push(`/profile/student/yourcourses/${id}`);
+                }}>Your Courses</button>
+                <button className="bg-teal-500 hover:bg-teal-600 text-white text-xl px-8 py-3 rounded-lg shadow-md transition duration-300" onClick={() => {
+                    router.push('/profile/student/allcourses');
+                }}>Browse Courses</button>
+                <button className="bg-teal-500 hover:bg-teal-600 text-white text-xl px-8 py-3 rounded-lg shadow-md transition duration-300" onClick={() => {
+                    router.push(`/studentprofile/scheduledlectures/${id}`);
+                }}>View Scheduled Lectures</button>
+            </div>
+        </div>
+    ) : (
+        <p className="text-2xl text-gray-800">Loading student info...</p>
+    )}
+</div>
 
-      </div>
-    );
+);
 }

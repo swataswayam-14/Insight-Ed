@@ -64,28 +64,30 @@ export default function TeacherProfileComp({params}:any){
     },[])
 
     return (
-        <div className="bg-gray-100 p-4 rounded-lg shadow-md text-center max-w-md mx-auto mt-40">
-        {teacherInfo ? (
-            <div>
-                <h2 className="text-2xl font-bold text-gray-800 mb-2">Username: {teacherInfo.username}</h2>
-                <p className="text-lg text-gray-600">Email: {teacherInfo.email}</p>
-                <p className="text-lg text-gray-600">Total Students Enrolled: {totalStudents.length}</p>
-                <p className="text-lg text-gray-600">Total Subjects Launched: {totalSubject.length}</p>
-                <p className="text-lg text-gray-600">Total Lectures Taken: {totalLecture.length}</p>
+<div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-blue-400 via-blue-300 to-blue-500">
+    {teacherInfo ? (
+        <div className="w-full max-w-4xl p-8 rounded-lg shadow-lg bg-white text-center">
+            <h2 className="text-3xl font-bold text-gray-800 mb-4">Username: {teacherInfo.username}</h2>
+            <p className="text-xl border-2 border-blue-200 m-2 rounded-full inline-block px-4 py-2 hover:bg-blue-200 font-semibold text-gray-500">Email: {teacherInfo.email}</p>
+            <p className="text-xl border-2 border-blue-200 m-2 rounded-full inline-block px-4 py-2 hover:bg-blue-200 font-semibold text-gray-500">Total Students Enrolled: {totalStudents.length}</p>
+            <p className="text-xl border-2 border-blue-200 m-2 rounded-full inline-block px-4 py-2 hover:bg-blue-200 font-semibold text-gray-500">Total Subjects Launched: {totalSubject.length}</p>
+            <p className="text-xl border-2 border-blue-200 m-2 rounded-full inline-block px-4 py-2 hover:bg-blue-200 font-semibold text-gray-500">Total Lectures Taken: {totalLecture.length}</p>
+            <div className="flex justify-center gap-4 mt-6">
+                <button className="bg-purple-600 hover:bg-purple-700 text-white text-lg px-6 py-3 rounded-md transition duration-300" onClick={() => {
+                    Router.push(`/profile/teacher/addsubject/${teacherInfo?.id}`);
+                }}>Add Subject</button>
+                <button className="bg-purple-600 hover:bg-purple-700 text-white text-lg px-6 py-3 rounded-md transition duration-300" onClick={() => {
+                    Router.push(`/profile/teacher/allsubject/${teacherInfo?.id}`)
+                }}>Analyse For a Subject</button>
+                <button className="bg-purple-600 hover:bg-purple-700 text-white text-lg px-6 py-3 rounded-md transition duration-300" onClick={() => {
+                    Router.push(`/profile/teacher/scheduledLectures/${teacherInfo?.id}`)
+                }}>Check your scheduled lectures</button>
             </div>
-        ) : (
-            <p className="text-lg text-gray-600">Loading teacher info...</p>
-        )}
-            <button className="bg-blue-500 hover:text-lg hover:bg-blue-600 text-white px-4 py-2 rounded-md mt-4 mr-2" onClick={() => {
-                Router.push(`/profile/teacher/addsubject/${teacherInfo?.id}`);
-            }}>Add Subject</button>
-            <button className="bg-green-500 hover:text-lg hover:bg-green-600 text-white px-4 py-2 rounded-md mt-4" onClick={() => {
-                Router.push(`/profile/teacher/allsubject/${teacherInfo?.id}`)
-            }}>Analyse For a Subject</button>
-            <button className="bg-green-500 hover:text-lg hover:bg-green-600 text-white px-4 py-2 rounded-md mt-4" onClick={() => {
-                //Router.push(`/profile/teacher/allsubject/${teacherInfo?.id}`)
-                Router.push(`/profile/teacher/scheduledLectures/${teacherInfo?.id}`)
-            }}>Check your scheduled lectures</button>
         </div>
+    ) : (
+        <p className="text-xl text-white">Loading teacher info...</p>
+    )}
+</div>
+
     );
 }

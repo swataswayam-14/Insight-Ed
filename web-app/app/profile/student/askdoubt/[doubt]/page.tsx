@@ -11,6 +11,7 @@ export default function doubt({params}:any){
     console.log(params.doubt);
     const [question , setQuestion] = useState("");
     const [answer, setAnswer] = useState("");
+    const [isLoading , setIsLoading] = useState(false);
 
     const getVideoLink = async()=>{
         try {
@@ -20,10 +21,13 @@ export default function doubt({params}:any){
                 console.log(videoLink);
                 
                 getAnswer(videoLink);
+                setIsLoading(false)
+            }else{
+              setIsLoading(true)
             }
         } catch (error) {
+            setIsLoading(true)
             console.log(error);
-            
         }
     }
 
@@ -65,23 +69,39 @@ export default function doubt({params}:any){
         setAnswer(data.output_text);
     }
     
-    return  <div className="min-h-screen bg-gray-900 text-white font-sans">
-    <header className="p-5 bg-gray-700">
-      <h1 className="text-3xl">Doubt Clearing Platform</h1>
+    return<div className="min-h-screen bg-gray-900 text-white font-sans">
+    <header className="p-5 bg-gray-800">
+      <h1 className="text-4xl font-bold">Doubt Clearing Platform</h1>
     </header>
-    <main className="flex flex-col items-center justify-center flex-1">
-      <textarea onChange={(e)=>{
-        setQuestion(e.target.value)
-      }} className="w-4/5 h-32 p-2 mb-5 rounded-lg bg-gray-700 text-white text-lg resize-none" placeholder="Enter your question..." />
+    <main className="flex flex-col items-center justify-center flex-1 px-4 md:px-0">
+      <textarea
+        onChange={(e) => setQuestion(e.target.value)}
+        className="w-full md:w-3/4 lg:w-2/3 h-40 p-4 mb-6 rounded-lg bg-gray-800 text-white text-lg resize-none shadow-lg"
+        placeholder="Enter your question..."
+      />
       
-      <button className="px-5 py-2 bg-green-600 text-white rounded-lg cursor-pointer transition duration-300 hover:bg-green-500" onClick={(event) => {
-        event.preventDefault();
-        getVideoLink();
-      }}>Submit</button>
+      <button
+        className="px-6 py-3 bg-green-700 text-white rounded-lg cursor-pointer transition duration-300 hover:bg-green-600 shadow-lg"
+        onClick={(event) => {
+          event.preventDefault();
+          getVideoLink();
+        }}
+      >
+        Submit
+      </button>
   
-      <div className="w-4/5 p-2 mb-5 mt-5 rounded-lg bg-gray-700 text-white">Answer: {answer}</div>
-      <p className="text-sm text-gray-500">Hint: Click the Submit button to get the answer.</p>
+      {isLoading ? (
+        <div className="flex justify-center items-center mt-5">
+          <div className="animate-spin rounded-full h-32 w-32 border-t-4 border-b-4 border-green-500"></div>
+        </div>
+      ) : (
+        <div className="w-full md:w-3/4 lg:w-2/3 p-4 mb-5 mt-5 rounded-lg bg-gray-800 text-white shadow-lg">
+          Answer: {answer}
+        </div>
+      )}
+      <p className="text-sm text-gray-500 mt-5">Hint: Click the Submit button to get the answer.</p>
     </main>
   </div>
+  
 }
 
