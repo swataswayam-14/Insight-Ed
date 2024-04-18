@@ -79,7 +79,7 @@ export async function RegisterCourse(subjectId:string, studentemail:string) {
                     email:studentemail
                 }
             })
-            console.log(student);
+            //console.log(student);
             
             if(student){
                 const studentid = student.id;
@@ -89,7 +89,11 @@ export async function RegisterCourse(subjectId:string, studentemail:string) {
                         studentid:studentid
                     }
                 })
-                if(isRegistered){
+                console.log('Logging is Registered');
+                
+                console.log(isRegistered.length);
+                
+                if(isRegistered.length != 0){
                     return "";
                 }else{
                     const register = await client.studentsubject.create({
