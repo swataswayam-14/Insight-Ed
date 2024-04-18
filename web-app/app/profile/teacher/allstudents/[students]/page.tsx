@@ -2,6 +2,7 @@
 import { findAllStudents } from "@/actions/TeacherProfile";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Loader from "@/app/components/Loader";
 
 interface Students{
     id:string;
@@ -19,9 +20,11 @@ export default function allStudents({params}:any){
     //console.log(params);
     
     const [students , setStudents] = useState<Students[]>([]);
+    const [loading , setLoading] = useState(false);
     
     useEffect(()=>{
         async function getStudents() {
+            setLoading(true);
             const response = await findAllStudents(params.students);
             setStudents(response.map((student) => ({
                 id: student.student.id,
@@ -33,26 +36,33 @@ export default function allStudents({params}:any){
                 phoneno: student.student.phoneno,
                 address: student.student.address,
               })));
+              setLoading(false);
         }
         getStudents();
     },[])
 
     return (
         <div>
-            <h1 className="bg-white text-black p-2 ">Student List</h1>
-            <ul className="bg-blue-400 text-black p-4">
-            {students.map((student) => (
-            <li key={student.id}>
-                <div>
-                    <h2>{student.firstname} {student.lastname}</h2>
-                    <p>{student.username}</p>
-                    <button onClick={()=>{
-                        Router.push(`/profile/teacher/student/${student.id}`)
-                    }} className="bg-blue-600 rounded-xl text-lg p-2">Analyse</button>
-                </div>
-            </li>
-            ))}
-            </ul>
+          {loading ? (
+            <Loader/>
+          ) : (
+            <div className="dark:bg-gray-800 dark:text-white">
+              <h1 className="bg-purple-600 text-white p-2 text-center">Student List</h1>
+              <ul className="bg-purple-500 text-white p-4">
+                {students.map((student) => (
+                  <li key={student.id} className="mb-4">
+                    <div className="p-4 rounded-lg shadow-lg">
+                      <h2 className="text-lg font-semibold">{student.firstname} {student.lastname}</h2>
+                      <p className="text-sm">{student.username}</p>
+                      <button onClick={()=>{
+                          Router.push(`/profile/teacher/student/${student.id}`)
+                      }} className="bg-purple-700 hover:bg-purple-800 rounded-xl text-lg p-2 mt-2 transition duration-300 ease-in-out">Analyse</button>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
-    )
+      );
 }

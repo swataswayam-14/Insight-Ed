@@ -3,6 +3,7 @@ import getAllCourses from "@/actions/AllCourses";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import Loader from "@/app/components/Loader";
 interface subject {
     id: string;
     title: string;
@@ -19,16 +20,19 @@ interface subject {
 export default function AllCourses(){
     const [subjects , setSubjects] = useState<subject[]>([]);
     const [searchQuery, setSearchQuery] = useState("");
+    const [loading , setLoading] = useState(false);
     useEffect(()=>{
         async function getSubjects() {
             try {
+                setLoading(true);
                 const subject = await getAllCourses();
                 if(subject){
                     setSubjects(subject)
-                    console.log(subject);
-                    
+                    //console.log(subject);
+                    setLoading(false)
                 }
             } catch (error) {
+                setLoading(true);
                 console.log(error);
                 
             }
@@ -38,7 +42,9 @@ export default function AllCourses(){
     const filteredSubjects = subjects.filter(subject =>
         subject.title.toLowerCase().includes(searchQuery.toLowerCase())
     );
-
+    if(loading){
+        return <Loader/>
+    }else{
     return (
         <div className="min-h-screen bg-gray-50">
     <input
@@ -60,6 +66,7 @@ export default function AllCourses(){
 </div>
 
     );
+}
 }
 
 

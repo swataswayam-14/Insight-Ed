@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { getScheduledLectures, getStudentDetails } from '@/actions/Student';
 import { useRouter } from 'next/navigation';
+import Loader from '@/app/components/Loader';
 export default function StudentProfileComp({params}:any) {
     const [studentInfo, setStudentInfo] = useState<{ username: string, email: string, id:string } | undefined>(undefined);
     const [id , setId] = useState("");
@@ -57,7 +58,7 @@ export default function StudentProfileComp({params}:any) {
             </div>
         </div>
     ) : (
-        <p className="text-2xl text-gray-800">Loading student info...</p>
+        <Loader/>
     )}
 </div>
 

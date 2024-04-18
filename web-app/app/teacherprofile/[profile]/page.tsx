@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { ScheduledLectures, TeacherProfile, TotalLectures, TotalStudents, TotalSubject } from '@/actions/TeacherProfile';
 import { useRouter } from 'next/navigation';
+import Loader from '@/app/components/Loader';
 export default function TeacherProfileComp({params}:any){
     //console.log(params.profile);
     
@@ -29,7 +30,7 @@ export default function TeacherProfileComp({params}:any){
             try {
                 const lectures = await ScheduledLectures(params.profile)
                 if(lectures.length != 0){
-                    alert(`You have ${lectures.length} lectures scheduled today`)
+                    //alert(`You have ${lectures.length} lectures scheduled today`)
                 }
             } catch (error) {
                 console.log(error);
@@ -85,7 +86,7 @@ export default function TeacherProfileComp({params}:any){
             </div>
         </div>
     ) : (
-        <p className="text-xl text-white">Loading teacher info...</p>
+        <Loader/>
     )}
 </div>
 

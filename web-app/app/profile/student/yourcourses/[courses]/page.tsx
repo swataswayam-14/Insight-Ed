@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 //import Subject from '@/app/components/SubjectComponent';
 import { YourCourses } from '@/actions/Student';
+import Loader from '@/app/components/Loader';
 
 interface SubjectData {
     id: string;
@@ -46,17 +47,22 @@ export default function ResgisteredSubject({params}:any) {
     console.log(params.courses);
     const [searchQuery, setSearchQuery] = useState("");
     const [subjects, setSubjects] = useState<SubjectData[]>([]);
+    const [loading , setLoading] = useState(false);
     useEffect(()=>{
         async function getSubjects() {
+            setLoading(true);
             const ResgisteredSubject = await YourCourses(params.courses);
             setSubjects(ResgisteredSubject);
+            setLoading(false);
         }
         getSubjects();
     },[])
     const filteredSubjects = subjects.filter(subject =>
       subject.title.toLowerCase().includes(searchQuery.toLowerCase())
     );
-
+    if(loading){
+        return <Loader/>
+    }else{
   return (
 <div className="min-h-screen bg-gradient-to-br from-purple-200 via-purple-100 to-purple-50 p-8">
     <div className="container mx-auto">
@@ -76,8 +82,9 @@ export default function ResgisteredSubject({params}:any) {
 </div>
 
   );
+}
 };
 
 
-{/* <Subject key={subject.id} title={subject.title} description={subject.description} subjectid={subject.id} /> */}
+
 

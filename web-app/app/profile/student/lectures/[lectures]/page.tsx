@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 //import Subject from '@/app/components/SubjectComponent';
 import { YourCourses } from '@/actions/Student';
 import getAllLectures from '@/actions/TeacherProfile';
+import Loader from '@/app/components/Loader';
 
 interface SubjectData {
     id: string;
@@ -27,24 +28,31 @@ export default function AllLectures({params}:any) {
     console.log(params.lectures);
     
     const [lectures, setLectures] = useState<SubjectData[]>([]);
+    const [loading , setLoading] = useState(false);
     useEffect(()=>{
         async function getSubjects() {
+            setLoading(true);
             const allLectures = await getAllLectures(params.lectures);
             setLectures(allLectures);
+            setLoading(false)
         }
         getSubjects();
     },[])
 
-  return (
-<div className="bg-gray-50 min-h-screen p-8">
-    <div className="container mx-auto">
-        {lectures.map((lecture) => (
-            <Subject key={lecture.id} title={lecture.title} description={lecture.link} lectureid={lecture.id} isStudent={true} yourCourses={true}/> 
-        ))}
-    </div>
-</div>
-
-  );
+    if(loading){
+        return <Loader/>
+    }else{
+        return (
+            <div className="bg-gray-50 min-h-screen p-8">
+                <div className="container mx-auto">
+                    {lectures.map((lecture) => (
+                        <Subject key={lecture.id} title={lecture.title} description={lecture.link} lectureid={lecture.id} isStudent={true} yourCourses={true}/> 
+                    ))}
+                </div>
+            </div>
+            
+        );
+    }
 };
 {/* <Subject key={lecture.id} title={lecture.title} description={lecture.link} lectureid={lecture.id} isStudent={true} yourCourses={true}/> */}
 
