@@ -37,7 +37,7 @@ export default function addLectureComponent({params}:any){
     <input
       className="bg-white text-black border border-gray-300 rounded-md px-4 py-2 mb-4"
       type="text"
-      placeholder="Upload Link"
+      placeholder="Google Meet Link"
       value={link}
       onChange={(e) => {
         setLink(e.target.value);

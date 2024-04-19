@@ -14,6 +14,7 @@ export default function Scheduled({params}:any){
           setLoading(true);
           const lectures:any = await getScheduledLectures(params.scheduled);
           setScheduledLectures(lectures);
+          
           setLoading(false);
         } catch (error) {
           setLoading(true);
@@ -34,17 +35,17 @@ export default function Scheduled({params}:any){
     else{
     return (
 <div className="p-4 bg-gradient-to-r from-purple-700 to-purple-200 rounded shadow-lg text-white">
-    <h2 className="text-3xl font-bold mb-6">Scheduled Lectures</h2>
+    <h2 className="text-3xl font-bold mb-6 text-black">Scheduled Lectures</h2>
     <ul className='divide-y divide-gray-700'>
         {scheduledLectures.map((lecture:any) => (
-        <li key={lecture.id} className="py-4 flex justify-between items-center">
+        <li key={lecture.id} className="py-4 flex justify-between items-center border-b-2 border-gray-600">
             <div>
-                <p className="text-xl font-semibold">{lecture.title}</p>
-                <p className="text-purple-200">{lecture.date}</p>
-                <p className="text-gray-400">By: {lecture.teacher.firstname} {lecture.teacher.lastname}</p>
-                <p className='text-gray-300'>{lecture.time}</p>
+                <p className="text-xl font-semibold">Lecture Title: {lecture.title}</p>
+                <p className="text-purple-300">Date: {lecture.date}</p>
+                <p className="text-gray-100">By: {lecture.teacher.firstname} {lecture.teacher.lastname}</p>
+                <p className='text-gray-100'>Time: {lecture.time}</p>
             </div>
-            <button className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out transform hover:-translate-y-1">Join Class</button>
+            <button className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out transform hover:-translate-y-1"><a href={lecture.link}>Join Class</a></button>
         </li>
         ))}
     </ul>

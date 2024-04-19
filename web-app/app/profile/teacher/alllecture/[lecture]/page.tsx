@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import getAllLectures from "@/actions/TeacherProfile";
 import Subject from "@/app/components/SubjectComponent";
 import Loader from "@/app/components/Loader";
+import { useRouter } from "next/navigation";
 interface LectureData {
     id: string;
     title: string;
@@ -11,7 +12,7 @@ interface LectureData {
 }
 export default function allLectures({params}:any){
     //console.log(params.lecture);
-    
+    const router = useRouter();
     const [lectures, setLectures] = useState<LectureData[]>([]);
     const [loading, setLoading] = useState(false);
     useEffect(()=>{
@@ -29,10 +30,11 @@ export default function allLectures({params}:any){
           {loading ? (
             <Loader/>
           ) : (
-            <div className="dark:bg-gray-800 dark:text-white">
+            <div>
               <h1 className="text-center text-3xl font-bold mb-6">All Lectures</h1>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                 {lectures.map((lecture) => (
+                  <div>
                   <Subject
                     key={lecture.id}
                     title={lecture.title}
@@ -41,7 +43,12 @@ export default function allLectures({params}:any){
                     isStudent={true}
                     yourCourses={false}
                   />
+                  <button className="bg-purple-500 hover:bg-purple-700 text-black font-bold py-2 px-4 rounded transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-110 mt-2" onClick={()=>{
+                    router.push(`/profile/teacher/alllecture/addlink/${lecture.id}`)
+                  }}>Add uploaded link</button>
+                  </div>
                 ))}
+                
               </div>
             </div>
           )}

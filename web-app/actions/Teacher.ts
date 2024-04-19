@@ -41,3 +41,36 @@ export async function TeacherSignin(email:string, password:string) {
         return -1;
     }
 }
+
+export async function addUploadLink(lectureid: string, UploadLink:string, teacherEmail:string) {
+    const lecture = await client.lecture.findUnique({
+        where:{
+            id:lectureid
+        }
+    })
+    if(lecture){
+        const teacher = await client.teacher.findUnique({
+            where:{
+                email:teacherEmail
+            }
+        })
+        if(teacher){
+            const updatedLecture = await client.lecture.update({
+                where: {
+                  id: lectureid
+                },
+                data: {
+                  link: UploadLink
+                }
+            })
+            console.log(updatedLecture.link);
+            return teacher.id;
+            
+        }else{
+            return null
+        }
+    }else{
+        return null;
+    }
+    
+}

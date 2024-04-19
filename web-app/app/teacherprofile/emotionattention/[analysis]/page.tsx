@@ -1,38 +1,56 @@
-"use client"
+import React from 'react';
 
-import axios from "axios"
-import { useEffect } from "react"
-
-export default function Emotion(){
-
-    useEffect(()=>{
-        async function getdata() {
-            const headers = {
-                'content-type':'application/json',
-                'access-control-allow-origin':'*'
-
-            }
-            const response = await axios.get('http://localhost:8080/emotionAttention?query=https://drive.google.com/file/d/1ht1X246gT9t8U92t5p3UIYGRbQSRBx94/view?usp=sharing',{headers})
-            const predictions = await response.data.prediction //array
-            const status = await response.data.status //string
-            const flatArray: any[][] = [];
-
-            predictions.forEach((sublist: any[]) => {
-              sublist.forEach((subsublist: any[]) => {
-                subsublist.forEach((item: any) => {
-                  if (flatArray.length === 0) {
-                    flatArray.push([item]);
-                  } else {
-                    const lastSubArray = flatArray[flatArray.length - 1];
-                    lastSubArray.push(item);
-                  }
-                });
-              });
-            });
-            console.log(predictions);
-        }
-        getdata()
-        
-    },[])
-    return<div>hello</div>
+interface DataType {
+  prediction: Array<Array<Array<number | string>>>;
+  status: string;
 }
+
+const data: DataType = {
+  "prediction": [
+    [[0.0], ["happy"], ["N/A"]],
+    [[13.0], ["happy"], ["N/A"]],
+    [[13.0], ["N/A"], ["Yes"]],
+    [[13.0], ["fear"], ["N/A"]],
+    [[26.0], ["happy"], ["N/A"]],
+    [[39.0], ["N/A"], ["Yes"]],
+    [[52.0], ["fear"], ["N/A"]],
+    [[65.0], ["happy"], ["N/A"]],
+    [[78.0], ["fear"], ["N/A"]],
+    [[91.0], ["disgust"], ["N/A"]],
+    [[104.0], ["happy"], ["N/A"]],
+    [[117.0], ["N/A"], ["Yes"]],
+    [[130.0], ["fear"], ["N/A"]]
+  ],
+  "status": "success"
+};
+
+const EmotionAttention: React.FC = () => {
+  return (
+<div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+  {data.prediction.map((item, index) => {
+    const time = item[0][0];
+    const emotionalState = item[1][0];
+    const number = item[2][0];
+    return (
+      <div key={index} className="p-4 bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 ease-in-out transform hover:-translate-y-1 motion-reduce:transition-none motion-reduce:hover:transform-none">
+        <div className="space-y-2">
+          <p className="text-gray-500 text-xs font-medium">
+            Time: <span className="text-gray-900 font-bold">{time}</span>
+          </p>
+          <p className="text-gray-500 text-xs font-medium">
+            Emotional State: <span className="text-gray-900 font-bold">{emotionalState}</span>
+          </p>
+          <p className="text-gray-500 text-xs font-medium">
+            Number: <span className="text-gray-900 font-bold">{number}</span>
+          </p>
+        </div>
+      </div>
+    );
+  })}
+</div>
+
+
+  );
+};
+
+export default EmotionAttention;

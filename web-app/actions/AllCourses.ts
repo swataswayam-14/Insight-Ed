@@ -24,7 +24,7 @@ export default async function getAllCourses() {
                 };
             });
 
-            console.log(subjectsWithTeacherNames);
+            //console.log(subjectsWithTeacherNames);
             return subjectsWithTeacherNames;
         }
     } catch (error) {

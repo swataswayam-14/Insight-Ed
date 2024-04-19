@@ -75,7 +75,7 @@ const Subject: React.FC<SubjectProps> = ({ title, description, lectureid, isStud
                           // Add your onClick event here
                       }}>Analyse Lecture</button>
                       <button className='bg-purple-500 hover:bg-purple-600 text-white p-3 rounded-lg transition ease-in-out duration-300' onClick={()=>{
-                          // Add your onClick event here
+                          router.push(`/profile/student/recommendation/${lectureid}`)
                       }}>Get Recommendation</button>
                       <button className='bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-lg transition ease-in-out duration-300' onClick={()=>{
                           router.push(`/profile/student/askdoubt/${lectureid}`)
