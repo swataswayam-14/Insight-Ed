@@ -3,16 +3,20 @@
 import React, { useEffect, useState } from 'react';
 import { addSubject } from '@/actions/TeacherProfile';
 import { useRouter } from 'next/navigation';
+
 export default function AddSubjectComponent({params}:any) {
     //console.log(params.subject);
     
     const Router = useRouter();
     const [title , setTitle] = useState("");
     const [description, setDescription] = useState("");
+  
 
 
     const addSubjectDetails = async ()=>{
+
         await addSubject(title, description, params.subject);
+ 
         Router.push(`/profile/teacher/allsubject/${params.subject}`);
     }
 
@@ -37,9 +41,13 @@ export default function AddSubjectComponent({params}:any) {
             setDescription(e.target.value);
           }}
         />
-        <button className="bg-blue-500 text-white border border-blue-500 rounded-md px-4 py-2" onClick={addSubjectDetails}>
-          Add Details
-        </button>
+        <div>
+            <button
+                className="bg-blue-500 text-white border border-blue-500 hover:bg-blue-600 rounded-md px-4 py-2"
+                onClick={addSubjectDetails}
+            >Add Details
+            </button>
+        </div>
       </div>
     );
 }

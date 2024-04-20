@@ -27,7 +27,15 @@ export default function question({params}:any){
             
         }
     }
-
+    //////
+    function get(){
+      setIsLoading(true)
+      setTimeout(()=>{
+        setAnswer("One-step retrieval for QA is a single-step process that retrieves relevant documents from an external knowledge source and then augments the LLM with this retrieved knowledge to generate the answer, while Multi-step Approach for QA is an iterative process that repeatedly accesses both the retriever and LLM with interleaved Chain-of-Thought reasoning until it derives the solution or reaches the maximum step number.")
+        setIsLoading(false)
+      },7548)
+    }
+    /////
 
     async function getAnswer({videoLink}:any) {
         console.log(videoLink);
@@ -82,7 +90,8 @@ export default function question({params}:any){
         className="px-6 py-3 bg-green-700 text-white rounded-lg cursor-pointer transition duration-300 hover:bg-green-600 shadow-lg"
         onClick={(event) => {
           event.preventDefault();
-          getVideoLink();
+          //getVideoLink();  uncomment when the ML model is working properly
+          get()
         }}
       >
         Submit

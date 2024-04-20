@@ -64,20 +64,20 @@ const Subject: React.FC<SubjectProps> = ({ title, description, lectureid, isStud
   return (
       <div className="mb-8">
           <div className="bg-white p-6 rounded-lg shadow-lg">
-              <h3 className="text-2xl font-bold text-gray-800 mb-3">Lecture Title: {title}</h3>
-              <p className="text-gray-600 mb-4">Lecture Link: {description}</p>
+              <h3 className="text-2xl font-bold text-gray-800 mb-3 text-center">Lecture Title: {title}</h3>
+              <p className="text-gray-600 mb-4 text-center">Lecture Link: {description}</p>
               {yourCourses && (
                   <div className="flex flex-wrap justify-center gap-4 mt-4">
                       <button className='bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-lg transition ease-in-out duration-300' onClick={()=>{
                           router.push(`/profile/student/analyse/${lectureid}`)
                       }}>Search Concepts in Video</button>
-                      <button className='bg-green-500 hover:bg-green-600 text-white p-3 rounded-lg transition ease-in-out duration-300' onClick={()=>{
-                          // Add your onClick event here
-                      }}>Analyse Lecture</button>
+                      {/* <button className='bg-green-500 hover:bg-green-600 text-white p-3 rounded-lg transition ease-in-out duration-300' onClick={()=>{
+                          router.push(`/profile/student/analyse/${lectureid}`)
+                      }}>Get Recommendation</button> */}
                       <button className='bg-purple-500 hover:bg-purple-600 text-white p-3 rounded-lg transition ease-in-out duration-300' onClick={()=>{
                           router.push(`/profile/student/recommendation/${lectureid}`)
-                      }}>Get Recommendation</button>
-                      <button className='bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-lg transition ease-in-out duration-300' onClick={()=>{
+                      }}>Analyse Lecture</button>
+                      <button className='bg-yellow-500 hover:bg-yellow-600 text-white p-3 rounded-lg transition ease-in-out duration-300' onClick={()=>{
                           router.push(`/profile/student/askdoubt/${lectureid}`)
                       }}>Ask Doubts</button>
                       <button className='bg-green-500 hover:bg-green-600 text-white p-3 rounded-lg transition ease-in-out duration-300' onClick={()=>{

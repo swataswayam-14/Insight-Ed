@@ -4,138 +4,138 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 
 // Sample data received from the backend
-// const backendResponse:any = {
-//     "result": [
-//       [
-//         [
-//           [
-//             0.0
-//           ],
-//           [
-//             13.0
-//           ],
-//           [
-//             "- Machine Learning",
-//             "- Economic Value",
-//             "- SWOT"
-//           ]
-//         ],
-//         [
-//           [
-//             13.0
-//           ],
-//           [
-//             26.0
-//           ],
-//           [
-//             "- Supervised Learning",
-//             "- Machine Learning"
-//           ]
-//         ],
-//         [
-//           [
-//             26.0
-//           ],
-//           [
-//             39.0
-//           ],
-//           [
-//             "- Supervised Learning",
-//             "- Training Data",
-//             "- Labeled Data"
-//           ]
-//         ],
-//         [
-//           [
-//             39.0
-//           ],
-//           [
-//             52.0
-//           ],
-//           [
-//             "- Machine learning",
-//             "- Supervised learning"
-//           ]
-//         ],
-//         [
-//           [
-//             52.0
-//           ],
-//           [
-//             65.0
-//           ],
-//           [
-//             "- Unsupervised learning",
-//             "- Predictive modeling",
-//             "- Machine learning"
-//           ]
-//         ],
-//         [
-//           [
-//             65.0
-//           ],
-//           [
-//             78.0
-//           ],
-//           [
-//             "- Spam filter",
-//             "- Email classification",
-//             "- Machine learning"
-//           ]
-//         ],
-//         [
-//           [
-//             78.0
-//           ],
-//           [
-//             91.0
-//           ],
-//           [
-//             "- Speech recognition",
-//             "- Audio transcription"
-//           ]
-//         ],
-//         [
-//           [
-//             91.0
-//           ],
-//           [
-//             104.0
-//           ],
-//           [
-//             "- Machine translation",
-//             "- Natural language processing",
-//             "- Language translation"
-//           ]
-//         ],
-//         [
-//           [
-//             104.0
-//           ],
-//           [
-//             117.0
-//           ],
-//           [
-//             "- Supervised Learning",
-//             "- Online Advertising"
-//           ]
-//         ],
-//         [
-//           [
-//             117.0
-//           ],
-//           [
-//             130.0
-//           ],
-//           [
-//             "- Online advertising",
-//             "- Keyword relevance",
-//             "- Ad click-through rates"
-//           ]
-//         ]
-//       ]
-//     ]
-//   }
+const backendResponse:any = {
+    "result": [
+      [
+        [
+          [
+            0.0
+          ],
+          [
+            13.0
+          ],
+          [
+            "- Machine Learning",
+            "- Economic Value",
+            "- SWOT"
+          ]
+        ],
+        [
+          [
+            13.0
+          ],
+          [
+            26.0
+          ],
+          [
+            "- Supervised Learning",
+            "- Machine Learning"
+          ]
+        ],
+        [
+          [
+            26.0
+          ],
+          [
+            39.0
+          ],
+          [
+            "- Supervised Learning",
+            "- Training Data",
+            "- Labeled Data"
+          ]
+        ],
+        [
+          [
+            39.0
+          ],
+          [
+            52.0
+          ],
+          [
+            "- Machine learning",
+            "- Supervised learning"
+          ]
+        ],
+        [
+          [
+            52.0
+          ],
+          [
+            65.0
+          ],
+          [
+            "- Unsupervised learning",
+            "- Predictive modeling",
+            "- Machine learning"
+          ]
+        ],
+        [
+          [
+            65.0
+          ],
+          [
+            78.0
+          ],
+          [
+            "- Spam filter",
+            "- Email classification",
+            "- Machine learning"
+          ]
+        ],
+        [
+          [
+            78.0
+          ],
+          [
+            91.0
+          ],
+          [
+            "- Speech recognition",
+            "- Audio transcription"
+          ]
+        ],
+        [
+          [
+            91.0
+          ],
+          [
+            104.0
+          ],
+          [
+            "- Machine translation",
+            "- Natural language processing",
+            "- Language translation"
+          ]
+        ],
+        [
+          [
+            104.0
+          ],
+          [
+            117.0
+          ],
+          [
+            "- Supervised Learning",
+            "- Online Advertising"
+          ]
+        ],
+        [
+          [
+            117.0
+          ],
+          [
+            130.0
+          ],
+          [
+            "- Online advertising",
+            "- Keyword relevance",
+            "- Ad click-through rates"
+          ]
+        ]
+      ]
+    ]
+  }
 
 
 
@@ -147,6 +147,23 @@ interface BackendResponse {
 
 
 const VideoDataDisplay: React.FC<{ backendResponse: BackendResponse }> = ({ backendResponse }) => {
+
+  /////
+  const [loader, setLoader] = useState(true);
+  const id = 1
+  useEffect(()=>{
+    function get(){
+      setTimeout(()=>{
+        setLoader(false)
+      },10000)
+    }
+    get()
+  },[id])
+  if(loader){
+    return <Loader/>
+  }
+
+  ////////
   return (
     <div>
         <div className='flex flex-wrap mb-2 justify-center items-center '>
@@ -182,17 +199,17 @@ const VideoDataDisplay: React.FC<{ backendResponse: BackendResponse }> = ({ back
 
 
 const App: React.FC = () => {
-    const [backendResponse, setBackendResponse] = useState<BackendResponse>()
+    // const [backendResponse, setBackendResponse] = useState<BackendResponse>()
     const [loader, setLoader] = useState(false);
-    useEffect(()=>{
-        async function getData() {
-            setLoader(true);
-            const response = await axios.get('http://localhost:8080/speechAndKeywordsEmotionDrwosiniess?query=https://drive.google.com/file/d/1ht1X246gT9t8U92t5p3UIYGRbQSRBx94/view');
-            setBackendResponse(response.data);
-            setLoader(false);
-        }
-        getData()
-    },[])
+    // useEffect(()=>{
+    //     async function getData() {
+    //         setLoader(true);
+    //         const response = await axios.get('http://localhost:8080/speechAndKeywordsEmotionDrwosiniess?query=https://drive.google.com/file/d/1ht1X246gT9t8U92t5p3UIYGRbQSRBx94/view');
+    //         setBackendResponse(response.data);
+    //         setLoader(false);
+    //     }
+    //     getData()
+    // },[])
     if(loader){
         return <Loader/>
     }else if(loader == false && backendResponse){

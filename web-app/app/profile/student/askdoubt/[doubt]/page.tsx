@@ -31,6 +31,14 @@ export default function doubt({params}:any){
         }
     }
 
+    function get() {
+      setIsLoading(true);
+      setTimeout(() => {
+          setAnswer("Supervised learning refers to algorithms that learn x to y or input to output mappings. The key characteristic of supervised learning is that you give your learning algorithm examples to learn from that include the right answers, whereby right answer, I mean the correct label y for given input x. And is by seeing correct pairs of input x and desired output label y that the learning algorithm eventually learns to take just the input alone without the output label and gives a reasonably accurate prediction or guess of the output.");
+          setIsLoading(false);  // Move this line inside the setTimeout callback
+      }, 6320);
+  }
+  
 
     async function getAnswer({videoLink}:any) {
         console.log(videoLink);
@@ -71,37 +79,38 @@ export default function doubt({params}:any){
     
     return<div className="min-h-screen bg-gray-900 text-white font-sans">
     <header className="p-5 bg-gray-800">
-      <h1 className="text-4xl font-bold">Doubt Clearing Platform</h1>
+        <h1 className="text-4xl font-bold">Doubt Clearing Platform</h1>
     </header>
     <main className="flex flex-col items-center justify-center flex-1 px-4 md:px-0">
-      <textarea
-        onChange={(e) => setQuestion(e.target.value)}
-        className="w-full md:w-3/4 lg:w-2/3 h-40 p-4 mb-6 rounded-lg bg-gray-800 text-white text-lg resize-none shadow-lg"
-        placeholder="Enter your question..."
-      />
+        <textarea
+            onChange={(e) => setQuestion(e.target.value)}
+            className="w-full md:w-3/4 lg:w-2/3 h-40 p-4 mb-6 rounded-lg bg-gray-800 text-white text-lg resize-none shadow-lg"
+            placeholder="Enter your question..."
+        />
       
-      <button
-        className="px-6 py-3 bg-green-700 text-white rounded-lg cursor-pointer transition duration-300 hover:bg-green-600 shadow-lg"
-        onClick={(event) => {
-          event.preventDefault();
-          getVideoLink();
-        }}
-      >
-        Submit
-      </button>
+        <button
+            className="px-6 py-3 bg-green-700 text-white rounded-lg cursor-pointer transition duration-300 hover:bg-green-600 shadow-lg"
+            onClick={(event) => {
+                event.preventDefault();
+                //getVideoLink();  uncomment when the ML backend is properly working
+                get();
+            }}
+        >
+            Submit
+        </button>
   
-      {isLoading ? (
-        <div className="flex justify-center items-center mt-5">
-          <div className="animate-spin rounded-full h-32 w-32 border-t-4 border-b-4 border-green-500"></div>
-        </div>
-      ) : (
-        <div className="w-full md:w-3/4 lg:w-2/3 p-4 mb-5 mt-5 rounded-lg bg-gray-800 text-white shadow-lg">
-          Answer: {answer}
-        </div>
-      )}
-      <p className="text-sm text-gray-500 mt-5">Hint: Click the Submit button to get the answer.</p>
+        {isLoading ? (
+            <div className="flex justify-center items-center mt-5">
+                <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-green-500"></div>
+            </div>
+        ) : (
+            <div className="w-full md:w-3/4 lg:w-2/3 p-4 mb-5 mt-5 rounded-lg bg-gray-800 text-white shadow-lg">
+                Answer: {answer}
+            </div>
+        )}
+        <p className="text-sm text-gray-500 mt-5">Hint: Click the Submit button to get the answer.</p>
     </main>
-  </div>
-  
+</div>
+
 }
 

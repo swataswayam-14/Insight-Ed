@@ -26,6 +26,8 @@ const data: DataType = {
 
 const EmotionAttention: React.FC = () => {
   return (
+    <div>
+      <div className='text-gray-300  text-center p-4 font-extrabold text-2xl'>It shows the emotional state of the student in each part of the lecture video</div>
 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
   {data.prediction.map((item, index) => {
     const time = item[0][0];
@@ -47,6 +49,7 @@ const EmotionAttention: React.FC = () => {
       </div>
     );
   })}
+</div>
 </div>
 
 

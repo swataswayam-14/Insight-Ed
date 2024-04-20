@@ -3,6 +3,10 @@ import React, { useEffect, useState } from 'react';
 import { getScheduledLectures, getStudentDetails } from '@/actions/Student';
 import { useRouter } from 'next/navigation';
 import Loader from '@/app/components/Loader';
+import ProgressBar from '@/app/components/ProgressBar';
+import UpcomingEvents from '@/app/components/UpcomingEvents';
+import FAQ from '@/app/components/FAQs';
+import TestiMonials from '@/app/components/TestimonialSlider';
 export default function StudentProfileComp({params}:any) {
     const [studentInfo, setStudentInfo] = useState<{ username: string, email: string, id:string } | undefined>(undefined);
     const [id , setId] = useState("");
@@ -40,19 +44,27 @@ export default function StudentProfileComp({params}:any) {
     }, [params.profile]);
 
     return (
-<div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-tl from-green-300 via-green-200 to-green-100">
+        <div>
+            <ProgressBar/>
+            <UpcomingEvents/>
+
+<div className=" flex flex-col items-center justify-center bg-gradient-to-tl from-gray-900 via-gray-700 to-gray-500">
     {studentInfo ? (
-        <div className="w-full max-w-6xl p-10 rounded-xl shadow-2xl bg-white text-center">
-            <h2 className="text-4xl font-extrabold text-gray-900 mb-6">Username: {studentInfo.username}</h2>
+        <div className="w-full max-w-5xl p-10 rounded-xl shadow-2xl bg-gray-200 text-center animate-fadeIn">
+            <div className="flex justify-between items-center mb-6">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQOGYkY8Di_0o3r5GeoBdOyHGHiVnAby59io_gmBtq4BFN0KXBSSD0FKFfbaWHnwlUIks&usqp=CAU" alt="School Logo" className="h-16 w-16 rounded-full border-2 border-teal-500"/>
+                <h2 className="text-4xl font-extrabold text-gray-900">Username: {studentInfo.username}</h2>
+                <img src="../love-icon.png" alt="Profile" className="h-16 w-16 rounded-full border-2 border-teal-500"/>
+            </div>
             <p className="text-2xl text-gray-800">Email: {studentInfo.email}</p>
             <div className="flex flex-wrap justify-center gap-6 mt-8">
-                <button className="bg-teal-500 hover:bg-teal-600 text-white text-xl px-8 py-3 rounded-lg shadow-md transition duration-300" onClick={() => {
+                <button className="bg-teal-500 hover:bg-teal-700 text-white text-xl px-8 py-3 rounded-lg shadow-md transition duration-300 ease-in-out transform hover:-translate-y-1" onClick={() => {
                     router.push(`/profile/student/yourcourses/${id}`);
                 }}>Your Courses</button>
-                <button className="bg-teal-500 hover:bg-teal-600 text-white text-xl px-8 py-3 rounded-lg shadow-md transition duration-300" onClick={() => {
+                <button className="bg-teal-500 hover:bg-teal-700 text-white text-xl px-8 py-3 rounded-lg shadow-md transition duration-300 ease-in-out transform hover:-translate-y-1" onClick={() => {
                     router.push('/profile/student/allcourses');
                 }}>Browse Courses</button>
-                <button className="bg-teal-500 hover:bg-teal-600 text-white text-xl px-8 py-3 rounded-lg shadow-md transition duration-300" onClick={() => {
+                <button className="bg-teal-500 hover:bg-teal-700 text-white text-xl px-8 py-3 rounded-lg shadow-md transition duration-300 ease-in-out transform hover:-translate-y-1" onClick={() => {
                     router.push(`/studentprofile/scheduledlectures/${id}`);
                 }}>View Scheduled Lectures</button>
             </div>
@@ -61,6 +73,10 @@ export default function StudentProfileComp({params}:any) {
         <Loader/>
     )}
 </div>
+{/* <FAQ/>
+<TestiMonials/> */}
+</div>
+
 
 );
 }
