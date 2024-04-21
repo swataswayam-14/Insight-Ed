@@ -49,6 +49,18 @@ const LearningSections = () => {
          title="Generation of Questionnaire on topics where students lacked attention"
          description="This feature allows the teacher to generate/upload a questionnaire through an LLM for the topics for the student to double-check his/her understanding to plan further steps and also get recommended most relevant YouTube videos on the same or the teacher could suggest some materials or videos from their course itself."
       />
+      <Section
+         title="Advance RAG-based QnA bot (Handwritten/Non-Handwritten)"
+         description="This feature allows the user to perform question-answer with their uploaded PDFs whether it's Handwritten/Non-Handwritten (under-development).This allows the student to quickly search and get relevant information/explanation for a particular topic of interest and not go through searching for it, wasting their precious time."
+      />
+      <Section
+         title="Advance RAG-based QnA bot for Video/Tutorial"
+         description="This feature allows the user to perform question-answer with their video/tutorials. This allows the student to quickly search and get relevant information/explanation for a particular topic of interest in the video/tutorial and not go through searching for it throughout the video."
+      />
+      <Section
+         title="[FUTURE] AI Tutor Bot Integration"
+         description="This feature allows the student to get clarifications and explanations regarding the topic that the student had studied for a better understanding from an AI Chatbot designed to act like a substitute teacher, encompassing vast knowledge in the subjects of the student."
+      />
     </div>
     </div>
   );
