@@ -5,7 +5,7 @@ export default function TestiMonials(){
     <div className="testimonial-slider mt-6">
         {/* Testimonial items */}
         <div className="testimonial-item p-4 bg-gray-100 rounded-lg">
-            <p className="text-md text-gray-700 italic">"The courses here have helped me improve my skills tremendously!"</p>
+            <p className="text-md text-gray-700 italic">\"The courses here have helped me improve my skills tremendously!\"</p>
             <div className="flex items-center mt-6">
                 <div className="testimonial-avatar">
                     <Image 
@@ -26,6 +26,5 @@ export default function TestiMonials(){
         {/* Repeat for other testimonials */}
     </div>
 </div>
-
 
 }

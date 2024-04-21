@@ -51,7 +51,7 @@ const KeywordsRecommendations: React.FC = ({params}:any) => {
     };
 
     fetchData();
-  }, [params.id]);
+  }, [params.id, headers]);
 
   return (
     <div>

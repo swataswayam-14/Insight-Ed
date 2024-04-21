@@ -40,7 +40,7 @@ const PredictionComponent = ({params}:any) => {
     };
 
     fetchData();
-  }, [params.analyse]);
+  }, [params.analyse, headers]);
 
   return (
     <div>
