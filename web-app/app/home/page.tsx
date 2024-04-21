@@ -8,7 +8,7 @@ export default function Home() {
       <Image
         className="rounded-xl shadow-lg dark:shadow-white/50"
         src="/Main.png"
-        alt="Next.js Logo"
+        alt="studying student"
         width={780}
         height={350}
         priority

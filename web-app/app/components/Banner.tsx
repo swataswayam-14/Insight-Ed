@@ -1,5 +1,5 @@
 import React from 'react';
-
+import Image from 'next/image';
 // Banner component
 const Banner = () => {
   return (
@@ -24,7 +24,14 @@ const Banner = () => {
         </div>
         <div className="flex-shrink-0">
           {/* Illustration or Image */}
-          <img src="../illustration.png" alt="Illustration" className="h-48 w-auto"/>
+          {/* <img src="../illustration.png" alt="Illustration" className="h-48 w-auto"/> */}
+          <Image
+            src="/illustration.png"
+            alt="Illustration"
+            width={300}  
+            height={200} 
+            className='h-48 w-auto' 
+          />
         </div>
       </div>
     </div>

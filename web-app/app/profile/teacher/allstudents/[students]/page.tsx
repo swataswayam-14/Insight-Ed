@@ -3,6 +3,7 @@ import { findAllStudents } from "@/actions/TeacherProfile";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Loader from "@/app/components/Loader";
+import Image from "next/image";
 
 interface Students{
     id:string;
@@ -52,7 +53,14 @@ export default function allStudents({params}:any){
               {students.map((student) => (
                 <li key={student.id} className="mb-4 w-full md:w-1/2 lg:w-1/3 animate-fade-in-down">
                   <div className="m-2 p-4 rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300 bg-gray-700">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQOGYkY8Di_0o3r5GeoBdOyHGHiVnAby59io_gmBtq4BFN0KXBSSD0FKFfbaWHnwlUIks&usqp=CAU" alt={student.firstname} className="w-full h-32 object-cover rounded-t-lg" />
+                    {/* <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQOGYkY8Di_0o3r5GeoBdOyHGHiVnAby59io_gmBtq4BFN0KXBSSD0FKFfbaWHnwlUIks&usqp=CAU" alt={student.firstname} className="w-full h-32 object-cover rounded-t-lg" /> */}
+                    <Image
+                      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQOGYkY8Di_0o3r5GeoBdOyHGHiVnAby59io_gmBtq4BFN0KXBSSD0FKFfbaWHnwlUIks&usqp=CAU"
+                      alt={student.firstname}
+                      height={200}
+                      width={300}
+                      className="w-full h-32 object-cover rounded-t-lg"
+                    />
                     <div className="pt-2">
                       <h2 className="text-lg font-semibold">{student.firstname} {student.lastname}</h2>
                       <p className="text-sm">{student.username}</p>

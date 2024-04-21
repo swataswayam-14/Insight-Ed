@@ -1,11 +1,18 @@
 import React from 'react';
-
+import Image from 'next/image';
 // Section component
 const Section = ({ title, description }:any) => {
   return (
 <div className="flex flex-col items-center p-4 bg-gray-800 text-white">
 <div className="mb-2">
-  <img src="../love-icon.png" alt="love for learning" className="w-16 h-16 rounded-full shadow-lg" />
+  {/* <img src="../love-icon.png" alt="love for learning" className="w-16 h-16 rounded-full shadow-lg" /> */}
+  <Image
+      src="/love-icon.png"
+      alt="love for learning"
+      width={300}  
+      height={200} 
+      className='w-16 h-16 rounded-full shadow-lg' 
+  />
 </div>
 <h2 className="text-xl font-bold mb-4">{title}</h2>
 <p className='text-gray-200'>{description}</p>

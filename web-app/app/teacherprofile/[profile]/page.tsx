@@ -6,6 +6,7 @@ import Loader from '@/app/components/Loader';
 import TeacherAchievements from '@/app/components/TeacherAchievements';
 import TeacherEvents from '@/app/components/TeacherEvents';
 import TeacherTestimonials from '@/app/components/TeacherTestimonials';
+import Image from 'next/image';
 export default function TeacherProfileComp({params}:any){
     //console.log(params.profile);
     
@@ -71,7 +72,14 @@ export default function TeacherProfileComp({params}:any){
 <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-blue-400 via-blue-300 to-blue-500">
     {teacherInfo ? (
         <div className="w-full max-w-4xl p-8 rounded-lg shadow-lg bg-white text-center transform transition duration-500 hover:scale-105">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQOGYkY8Di_0o3r5GeoBdOyHGHiVnAby59io_gmBtq4BFN0KXBSSD0FKFfbaWHnwlUIks&usqp=CAU" alt="Teacher's Avatar" className="w-32 h-32 rounded-full mx-auto mb-4"/>
+            {/* <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQOGYkY8Di_0o3r5GeoBdOyHGHiVnAby59io_gmBtq4BFN0KXBSSD0FKFfbaWHnwlUIks&usqp=CAU" alt="Teacher's Avatar" className="w-32 h-32 rounded-full mx-auto mb-4"/> */}
+            <Image
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQOGYkY8Di_0o3r5GeoBdOyHGHiVnAby59io_gmBtq4BFN0KXBSSD0FKFfbaWHnwlUIks&usqp=CAU"
+                alt="Teacher's Avatar"
+                height={200}
+                width={300}
+                className='w-32 h-32 rounded-full mx-auto mb-4'
+            />
             <h2 className="text-3xl font-bold text-gray-800 mb-4">Username: {teacherInfo.username}</h2>
             <div className="grid grid-cols-2 gap-4">
                 <p className="text-xl border-2 border-blue-200 m-2 rounded-full inline-block px-4 py-2 hover:bg-blue-200 font-semibold text-gray-500 transition duration-300 ease-in-out">Email: {teacherInfo.email}</p>
