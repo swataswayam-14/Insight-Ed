@@ -1,4 +1,5 @@
 "use client"
+import React from "react";
 import { findAllStudents } from "@/actions/TeacherProfile";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";

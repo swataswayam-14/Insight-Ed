@@ -1,5 +1,5 @@
 "use client"
-
+import React from "react";
 import { useEffect, useState } from "react";
 import getAllLectures from "@/actions/TeacherProfile";
 import Subject from "@/app/components/SubjectComponent";
