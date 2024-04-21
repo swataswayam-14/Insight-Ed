@@ -35,7 +35,7 @@ const PredictionComponent = ({params}:any) => {
         'server': 'gunicorn',
         'connection': 'close'
     };
-  }, []);
+  }, [formattedDate]);
 
   useEffect(() => {
     const fetchData = async () => {

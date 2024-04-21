@@ -32,7 +32,7 @@ const KeywordsRecommendations: React.FC = ({params}:any) => {
         'server': 'gunicorn',
         'connection': 'close'
     };
-  }, []);
+  }, [formattedDate]);
 
   useEffect(() => {
     const fetchData = async () => {
