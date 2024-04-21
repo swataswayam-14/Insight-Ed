@@ -44,7 +44,7 @@ const Subject: React.FC<SubjectProps> = ({ title, description, subjectid }) => {
 
 export default function ResgisteredSubject({params}:any) {
     //const {studentid}:any = useParams()
-    console.log(params.courses);
+    //console.log(params.courses);
     const [searchQuery, setSearchQuery] = useState("");
     const [subjects, setSubjects] = useState<SubjectData[]>([]);
     const [loading , setLoading] = useState(false);

@@ -14,7 +14,7 @@ interface SubjectData {
 export default function subjects({params}:any){
     const [subjects, setSubjects] = useState<SubjectData[]>([]);
     const [loading , setLoading] = useState(false);
-    console.log(params.subjects);
+    //console.log(params.subjects);
     
   useEffect(() => {
     const fetchSubjects = async () => {

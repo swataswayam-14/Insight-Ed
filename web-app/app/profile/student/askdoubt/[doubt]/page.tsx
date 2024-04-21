@@ -8,7 +8,7 @@ import { getVideoLinkFromLectureId } from "@/actions/Student";
 export default function doubt({params}:any){
     
 
-    console.log(params.doubt);
+    // console.log(params.doubt);
     const [question , setQuestion] = useState("");
     const [answer, setAnswer] = useState("");
     const [isLoading , setIsLoading] = useState(false);
