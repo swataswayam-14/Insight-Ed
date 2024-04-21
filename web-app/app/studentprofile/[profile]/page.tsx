@@ -5,8 +5,9 @@ import { useRouter } from 'next/navigation';
 import Loader from '@/app/components/Loader';
 import ProgressBar from '@/app/components/ProgressBar';
 import UpcomingEvents from '@/app/components/UpcomingEvents';
+import Image from 'next/image';
 import FAQ from '@/app/components/FAQs';
-import TestiMonials from '@/app/components/TestimonialSlider';
+//import TestiMonials from '@/app/components/TestimonialSlider';
 export default function StudentProfileComp({params}:any) {
     const [studentInfo, setStudentInfo] = useState<{ username: string, email: string, id:string } | undefined>(undefined);
     const [id , setId] = useState("");
@@ -52,9 +53,23 @@ export default function StudentProfileComp({params}:any) {
     {studentInfo ? (
         <div className="w-full max-w-5xl p-10 rounded-xl shadow-2xl bg-gray-200 text-center animate-fadeIn">
             <div className="flex justify-between items-center mb-6">
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQOGYkY8Di_0o3r5GeoBdOyHGHiVnAby59io_gmBtq4BFN0KXBSSD0FKFfbaWHnwlUIks&usqp=CAU" alt="School Logo" className="h-16 w-16 rounded-full border-2 border-teal-500"/>
+                {/* <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQOGYkY8Di_0o3r5GeoBdOyHGHiVnAby59io_gmBtq4BFN0KXBSSD0FKFfbaWHnwlUIks&usqp=CAU" alt="School Logo" className="h-16 w-16 rounded-full border-2 border-teal-500"/> */}
+                <Image
+                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQOGYkY8Di_0o3r5GeoBdOyHGHiVnAby59io_gmBtq4BFN0KXBSSD0FKFfbaWHnwlUIks&usqp=CAU"
+                    alt='School Logo'
+                    height={200}
+                    width={300}
+                    className='h-16 w-16 rounded-full border-2 border-teal-500'
+                />
                 <h2 className="text-4xl font-extrabold text-gray-900">Username: {studentInfo.username}</h2>
-                <img src="../love-icon.png" alt="Profile" className="h-16 w-16 rounded-full border-2 border-teal-500"/>
+                {/* <img src="../love-icon.png" alt="Profile" className="h-16 w-16 rounded-full border-2 border-teal-500"/> */}
+                <Image
+                    src="/love-icon.png"
+                    alt='Profile'
+                    height={200}
+                    width={300}
+                    className='h-16 w-16 rounded-full border-2 border-teal-500'
+                />
             </div>
             <p className="text-2xl text-gray-800">Email: {studentInfo.email}</p>
             <div className="flex flex-wrap justify-center gap-6 mt-8">

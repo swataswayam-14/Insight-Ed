@@ -1,7 +1,7 @@
 "use client"
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 
-const PredictionComponent = () => {
+const PredictionComponent = ({params}:any) => {
   const [prediction, setPrediction] = useState([]);
   const [status, setStatus] = useState(null);
 
@@ -20,14 +20,22 @@ const PredictionComponent = () => {
   
   const formattedDate = `${day}, ${dateNum} ${month} ${year} ${hours}:${minutes}:${seconds} GMT`;
   console.log(formattedDate);
-  const headers = {
-      'content-type': 'application/json',
-      'access-control-allow-origin': '*',
-      'date': `${formattedDate}`, //'date': 'Mon, 08 Apr 2024 07:22:14 GMT',
-      'server': 'gunicorn',
-      'connection': 'close'
+  // const headers = {
+  //     'content-type': 'application/json',
+  //     'access-control-allow-origin': '*',
+  //     'date': `${formattedDate}`, //'date': 'Mon, 08 Apr 2024 07:22:14 GMT',
+  //     'server': 'gunicorn',
+  //     'connection': 'close'
+  //   };
+  const headers = useMemo(() => {
+    return {
+        'content-type': 'application/json',
+        'access-control-allow-origin': '*',
+        'date': `${formattedDate}`, //'date': 'Mon, 08 Apr 2024 07:22:14 GMT',
+        'server': 'gunicorn',
+        'connection': 'close'
     };
-
+  }, [formattedDate]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -40,7 +48,7 @@ const PredictionComponent = () => {
     };
 
     fetchData();
-  }, []);
+  }, [params.analyse]);
 
   return (
     <div>

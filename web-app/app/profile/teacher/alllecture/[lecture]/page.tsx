@@ -1,5 +1,5 @@
 "use client"
-
+import React from "react";
 import { useEffect, useState } from "react";
 import getAllLectures from "@/actions/TeacherProfile";
 import Subject from "@/app/components/SubjectComponent";
@@ -10,7 +10,7 @@ interface LectureData {
     title: string;
     link: string;
 }
-export default function allLectures({params}:any){
+export default function AllLectures({params}:any){
     //console.log(params.lecture);
     const router = useRouter();
     const [lectures, setLectures] = useState<LectureData[]>([]);
@@ -23,7 +23,7 @@ export default function allLectures({params}:any){
             setLoading(false);
         }
         allLectures();
-    },[])
+    },[params.lecture])
 
     return (
         <div>
@@ -34,7 +34,7 @@ export default function allLectures({params}:any){
               <h1 className="text-center text-3xl font-bold mb-6">All Lectures</h1>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                 {lectures.map((lecture) => (
-                  <div>
+                  <div key={lecture.id}>
                   <Subject
                     key={lecture.id}
                     title={lecture.title}

@@ -1,14 +1,14 @@
 "use client"
-
+import React from "react";
 import axios from "axios";
 import { useState } from "react";
 
 import { getVideoLinkFromLectureId } from "@/actions/Student";
 
-export default function doubt({params}:any){
+export default function Doubt({params}:any){
     
 
-    console.log(params.doubt);
+    // console.log(params.doubt);
     const [question , setQuestion] = useState("");
     const [answer, setAnswer] = useState("");
     const [isLoading , setIsLoading] = useState(false);
@@ -34,8 +34,13 @@ export default function doubt({params}:any){
     function get() {
       setIsLoading(true);
       setTimeout(() => {
-          setAnswer("Supervised learning refers to algorithms that learn x to y or input to output mappings. The key characteristic of supervised learning is that you give your learning algorithm examples to learn from that include the right answers, whereby right answer, I mean the correct label y for given input x. And is by seeing correct pairs of input x and desired output label y that the learning algorithm eventually learns to take just the input alone without the output label and gives a reasonably accurate prediction or guess of the output.");
-          setIsLoading(false);  // Move this line inside the setTimeout callback
+        if(question.toLowerCase() != "what is supervised learning exactly?" ){
+            setAnswer("Answer is not available for this question");
+            setIsLoading(false);
+        }else{
+            setAnswer("Supervised learning refers to algorithms that learn x to y or input to output mappings. The key characteristic of supervised learning is that you give your learning algorithm examples to learn from that include the right answers, whereby right answer, I mean the correct label y for given input x. And is by seeing correct pairs of input x and desired output label y that the learning algorithm eventually learns to take just the input alone without the output label and gives a reasonably accurate prediction or guess of the output.");
+            setIsLoading(false);
+        }
       }, 6320);
   }
   

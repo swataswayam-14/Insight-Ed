@@ -25,7 +25,7 @@ interface SubjectProps {
 
 export default function AllLectures({params}:any) {
     //const {studentid}:any = useParams()
-    console.log(params.lectures);
+    //console.log(params.lectures);
     
     const [lectures, setLectures] = useState<SubjectData[]>([]);
     const [loading , setLoading] = useState(false);
@@ -37,7 +37,7 @@ export default function AllLectures({params}:any) {
             setLoading(false)
         }
         getSubjects();
-    },[])
+    },[params.lectures])
 
     if(loading){
         return <Loader/>

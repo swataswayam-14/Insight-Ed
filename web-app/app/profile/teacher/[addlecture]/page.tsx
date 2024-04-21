@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { addLecture } from '@/actions/TeacherProfile';
 import { useRouter } from 'next/navigation';
-export default function addLectureComponent({params}:any){
+export default function AddLectureComponent({params}:any){
     const Router = useRouter();
     const [title , setTitle] = useState("");
     const [link, setLink] = useState("");
