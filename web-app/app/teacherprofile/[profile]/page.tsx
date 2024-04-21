@@ -65,7 +65,7 @@ export default function TeacherProfileComp({params}:any){
             }
         }
         fetchTotalInfo()
-    },[])
+    },[params.profile])
 
     return (
 <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-blue-400 via-blue-300 to-blue-500">

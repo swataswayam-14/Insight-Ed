@@ -15,13 +15,11 @@ export default function FAQ(){
             </h2>
             <div id="collapseOne" className="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#faqAccordion">
                 <div className="accordion-body py-4 px-6 text-gray-300">
-                    You can enroll in new courses by visiting the 'Browse Courses' section and selecting the courses you're interested in.
+                    You can enroll in new courses by visiting the &apos;Browse Courses&apos; section and selecting the courses you&apos;re interested in.
                 </div>
             </div>
         </div>
         {/* Repeat for other FAQs */}
     </div>
 </div>
-
-
 }

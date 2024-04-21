@@ -8,13 +8,13 @@ export default function TestiMonials(){
             <p className="text-md text-gray-700 italic">"The courses here have helped me improve my skills tremendously!"</p>
             <div className="flex items-center mt-6">
                 <div className="testimonial-avatar">
-                    {/* <img className="w-12 h-12 rounded-full border-2 border-gray-300" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQOGYkY8Di_0o3r5GeoBdOyHGHiVnAby59io_gmBtq4BFN0KXBSSD0FKFfbaWHnwlUIks&usqp=CAU" alt="Student Avatar"/> */}
                     <Image 
                         src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQOGYkY8Di_0o3r5GeoBdOyHGHiVnAby59io_gmBtq4BFN0KXBSSD0FKFfbaWHnwlUIks&usqp=CAU"
                         alt="Student Avatar"
-                        height={200}
-                        width={300}
                         className="w-12 h-12 rounded-full border-2 border-gray-300"
+                        width={200}
+                        height={300}
+                        placeholder="blur"
                     />
                 </div>
                 <div className="ml-4">
