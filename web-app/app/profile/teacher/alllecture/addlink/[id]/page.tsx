@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { addUploadLink } from '@/actions/Teacher';
 import Loader from '@/app/components/Loader';
-export default function addLink({params}:any){
+export default function AddLink({params}:any){
     const router = useRouter();
     const [uploadLink , setUploadLink] = useState("");
     const [teacherEmail, setTeacherEmail] = useState("");

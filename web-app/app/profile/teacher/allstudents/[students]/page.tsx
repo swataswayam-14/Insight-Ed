@@ -17,7 +17,7 @@ interface Students{
     address:string;
 }
 
-export default function allStudents({params}:any){
+export default function AllStudents({params}:any){
     const Router = useRouter()
     //console.log(params);
     

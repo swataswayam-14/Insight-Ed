@@ -23,7 +23,7 @@ export default function Scheduled({params}:any){
       };
   
       fetchScheduledLectures();
-    }, []);
+    },[]);
     if(loading){
       return <Loader/>
     }

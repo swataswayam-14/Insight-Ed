@@ -20,7 +20,7 @@ const SearchInstructions = () => {
   );
 };
 
-export default function analysis({params}:any) {
+export default function Analysis({params}:any) {
   //console.log(params.analysis);
   
   const [data, setData] = useState<ResultArray>([]);

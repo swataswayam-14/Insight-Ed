@@ -15,7 +15,6 @@ export default function TeacherProfileComp({params}:any){
     const [totalSubject , setTotalSubject] = useState([]);
     const [totalLecture , setTotalLecture] = useState([]);
     const Router = useRouter();
-
     useEffect(() => {
         const fetchTeacherInfo = async () => {
             try {
@@ -44,7 +43,7 @@ export default function TeacherProfileComp({params}:any){
 
         fetchTeacherInfo();
         checkScheduledLectures();
-    }, [params.profile]);
+    }, []);
 
     useEffect(()=>{
         const fetchTotalInfo = async ()=>{

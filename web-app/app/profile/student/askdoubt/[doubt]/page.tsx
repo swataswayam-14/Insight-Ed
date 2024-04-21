@@ -5,7 +5,7 @@ import { useState } from "react";
 
 import { getVideoLinkFromLectureId } from "@/actions/Student";
 
-export default function doubt({params}:any){
+export default function Doubt({params}:any){
     
 
     // console.log(params.doubt);

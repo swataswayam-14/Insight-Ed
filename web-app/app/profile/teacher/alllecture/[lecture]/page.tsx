@@ -10,7 +10,7 @@ interface LectureData {
     title: string;
     link: string;
 }
-export default function allLectures({params}:any){
+export default function AllLectures({params}:any){
     //console.log(params.lecture);
     const router = useRouter();
     const [lectures, setLectures] = useState<LectureData[]>([]);

@@ -11,7 +11,7 @@ interface SubjectData {
     title: string;
     description: string;
 }
-export default function subjects({params}:any){
+export default function Subjects({params}:any){
     const [subjects, setSubjects] = useState<SubjectData[]>([]);
     const [loading , setLoading] = useState(false);
     //console.log(params.subjects);
