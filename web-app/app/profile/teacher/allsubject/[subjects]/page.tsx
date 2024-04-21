@@ -25,7 +25,7 @@ export default function Subjects({params}:any){
     };
 
     fetchSubjects();
-  }, []);
+  }, [params.subjects]);
 
   return (
     <div>

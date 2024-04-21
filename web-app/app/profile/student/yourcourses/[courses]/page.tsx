@@ -56,7 +56,7 @@ export default function ResgisteredSubject({params}:any) {
             setLoading(false);
         }
         getSubjects();
-    },[])
+    },[params.courses])
     const filteredSubjects = subjects.filter(subject =>
       subject.title.toLowerCase().includes(searchQuery.toLowerCase())
     );

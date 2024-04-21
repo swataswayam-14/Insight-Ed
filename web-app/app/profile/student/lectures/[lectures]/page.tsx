@@ -37,7 +37,7 @@ export default function AllLectures({params}:any) {
             setLoading(false)
         }
         getSubjects();
-    },[])
+    },[params.lectures])
 
     if(loading){
         return <Loader/>

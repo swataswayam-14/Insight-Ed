@@ -42,7 +42,7 @@ export default function StudentProfileComp({params}:any) {
         }
         fetchStudentInfo();
         getScheduledlecture();
-    }, []);
+    }, [params.profile]);
 
     return (
         <div>

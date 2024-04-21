@@ -1,7 +1,7 @@
 "use client"
 import React, { useEffect, useState } from 'react';
 
-const PredictionComponent = () => {
+const PredictionComponent = ({params}:any) => {
   const [prediction, setPrediction] = useState([]);
   const [status, setStatus] = useState(null);
 
@@ -40,7 +40,7 @@ const PredictionComponent = () => {
     };
 
     fetchData();
-  }, []);
+  }, [params.analyse]);
 
   return (
     <div>

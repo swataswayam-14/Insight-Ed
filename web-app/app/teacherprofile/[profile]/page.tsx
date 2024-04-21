@@ -43,7 +43,7 @@ export default function TeacherProfileComp({params}:any){
 
         fetchTeacherInfo();
         checkScheduledLectures();
-    }, []);
+    }, [params.profile]);
 
     useEffect(()=>{
         const fetchTotalInfo = async ()=>{

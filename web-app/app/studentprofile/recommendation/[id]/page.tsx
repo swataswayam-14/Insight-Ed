@@ -7,7 +7,7 @@ type KeywordsRecommendationsData = {
   recommendations: string[];
 };
 
-const KeywordsRecommendations: React.FC = () => {
+const KeywordsRecommendations: React.FC = ({params}:any) => {
   const [keywords, setKeywords] = useState<string[]>([]);
   const [recommendations, setRecommendations] = useState<string[]>([]);
   const date = new Date();
@@ -51,7 +51,7 @@ const KeywordsRecommendations: React.FC = () => {
     };
 
     fetchData();
-  }, []);
+  }, [params.id]);
 
   return (
     <div>

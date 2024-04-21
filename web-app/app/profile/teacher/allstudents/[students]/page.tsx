@@ -41,7 +41,7 @@ export default function AllStudents({params}:any){
               setLoading(false);
         }
         getStudents();
-    },[])
+    },[params.students])
 
     return (
       <div>
