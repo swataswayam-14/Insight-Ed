@@ -12,13 +12,13 @@ Our solution tries to bridge the knowledge gap between a teacher and a student i
 
 ## Tech Stack
 
-**Client:** HTML, Next.js
+**Client:** Tailwind CSS, Typescript, Next.js
 
-**Backend:** Flask, Python, Keras, Tensorflow, Gemini API, Whisper API, HuggingFace Open-Source Models (EmotionLLM), MTCNN, Next.js, TypeScript
+**Backend:** Flask, Python, Langchain, TF-Keras, GeminiPro and GeminiProVision API, Whisper API, HuggingFace Open-Source Models (EmotionLLM), MTCNN, Next.js, TypeScript
 
 **Storage:** PostgreSQL, ChromaDB
 
-**Other Tools:** GCP (Cloud Run), Docker, Render
+**Other Tools:** GCP (Cloud Run), Docker, Vercel
 
 ## Features
 
@@ -62,6 +62,14 @@ Please install the following requirements before proceeding with the next steps
 ```bash
 Docker
 ```
+#### Database
+Create an environment variable DATABASE_URL in the .env file for the database to work. 
+
+```bash
+DATABASE_URL="postgresql://swataswayamdash:Dcnhf1IajsW5@ep-gentle-math-a5z04t41.us-east-2.aws.neon.tech/Insight-Ed?sslmode=require"
+
+```
+
 
 
 ## Run Locally
@@ -95,7 +103,7 @@ Go to the project directory
 ```bash
   cd Insight-Ed
 ```
-Create an enviroment variable 'GOOGLE_API_KEY' in the .env file for gemini-pro to work
+Create an environment variable 'GOOGLE_API_KEY' in the .env file for GeminiPro to work
 
 ```bash
   GOOGLE_API_KEY=<YOUR_API_KEY>
