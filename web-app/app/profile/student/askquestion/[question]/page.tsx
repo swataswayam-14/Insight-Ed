@@ -31,8 +31,13 @@ export default function question({params}:any){
     function get(){
       setIsLoading(true)
       setTimeout(()=>{
-        setAnswer("One-step retrieval for QA is a single-step process that retrieves relevant documents from an external knowledge source and then augments the LLM with this retrieved knowledge to generate the answer, while Multi-step Approach for QA is an iterative process that repeatedly accesses both the retriever and LLM with interleaved Chain-of-Thought reasoning until it derives the solution or reaches the maximum step number.")
-        setIsLoading(false)
+        if(question.toLowerCase() != "one line difference between one retrieval for QA and Multi-step Approach for QA".toLowerCase()){
+          setAnswer("Answer for this question is not available");
+          setIsLoading(false);
+        }else{
+          setAnswer("One-step retrieval for QA is a single-step process that retrieves relevant documents from an external knowledge source and then augments the LLM with this retrieved knowledge to generate the answer, while Multi-step Approach for QA is an iterative process that repeatedly accesses both the retriever and LLM with interleaved Chain-of-Thought reasoning until it derives the solution or reaches the maximum step number.")
+          setIsLoading(false);
+        }
       },7548)
     }
     /////
@@ -80,6 +85,10 @@ export default function question({params}:any){
       <h1 className="text-4xl font-bold">Doubt Clearing Platform</h1>
     </header>
     <main className="flex flex-col items-center justify-center flex-1 px-4 md:px-0">
+    <textarea
+        className="w-full md:w-3/4 lg:w-2/3 h-20 p-4 mb-6 rounded-lg bg-gray-800 text-white text-lg resize-none shadow-lg"
+        placeholder="Enter the pdf Link"
+      />
       <textarea
         onChange={(e) => setQuestion(e.target.value)}
         className="w-full md:w-3/4 lg:w-2/3 h-40 p-4 mb-6 rounded-lg bg-gray-800 text-white text-lg resize-none shadow-lg"
