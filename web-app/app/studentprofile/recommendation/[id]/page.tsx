@@ -1,5 +1,5 @@
 "use client"
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import axios from 'axios';
 
 type KeywordsRecommendationsData = {
@@ -24,13 +24,15 @@ const KeywordsRecommendations: React.FC = ({params}:any) => {
   
   const formattedDate = `${day}, ${dateNum} ${month} ${year} ${hours}:${minutes}:${seconds} GMT`;
   console.log(formattedDate);
-  const headers = {
-      'content-type': 'application/json',
-      'access-control-allow-origin': '*',
-      'date': `${formattedDate}`, //'date': 'Mon, 08 Apr 2024 07:22:14 GMT',
-      'server': 'gunicorn',
-      'connection': 'close'
+  const headers = useMemo(() => {
+    return {
+        'content-type': 'application/json',
+        'access-control-allow-origin': '*',
+        'date': `${formattedDate}`, //'date': 'Mon, 08 Apr 2024 07:22:14 GMT',
+        'server': 'gunicorn',
+        'connection': 'close'
     };
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -51,7 +53,7 @@ const KeywordsRecommendations: React.FC = ({params}:any) => {
     };
 
     fetchData();
-  }, [params.id, headers]);
+  }, [params.id]);
 
   return (
     <div>

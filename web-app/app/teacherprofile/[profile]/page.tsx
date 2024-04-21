@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import Loader from '@/app/components/Loader';
 import TeacherAchievements from '@/app/components/TeacherAchievements';
 import TeacherEvents from '@/app/components/TeacherEvents';
-import TeacherTestimonials from '@/app/components/TeacherTestimonials';
+//import TeacherTestimonials from '@/app/components/TeacherTestimonials';
 import Image from 'next/image';
 export default function TeacherProfileComp({params}:any){
     //console.log(params.profile);
@@ -98,15 +98,15 @@ export default function TeacherProfileComp({params}:any){
                 }}>Check your scheduled lectures</button>
             </div>
             <div className="flex flex-wrap justify-around items-start mt-8">
-            <div className="w-full md:w-1/3 p-4">
+            <div className="w-full md:w-1/2 p-4">
                 <TeacherAchievements/>
             </div>
-            <div className="w-full md:w-1/3 p-4">
+            <div className="w-full md:w-1/2 p-4">
                 <TeacherEvents/>
             </div>
-            <div className="w-full md:w-1/3 p-4">
+            {/* <div className="w-full md:w-1/3 p-4">
                 <TeacherTestimonials/>
-            </div>
+            </div> */}
             </div>
         </div>
     ) : (

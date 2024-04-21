@@ -7,7 +7,7 @@ import ProgressBar from '@/app/components/ProgressBar';
 import UpcomingEvents from '@/app/components/UpcomingEvents';
 import Image from 'next/image';
 import FAQ from '@/app/components/FAQs';
-import TestiMonials from '@/app/components/TestimonialSlider';
+//import TestiMonials from '@/app/components/TestimonialSlider';
 export default function StudentProfileComp({params}:any) {
     const [studentInfo, setStudentInfo] = useState<{ username: string, email: string, id:string } | undefined>(undefined);
     const [id , setId] = useState("");
