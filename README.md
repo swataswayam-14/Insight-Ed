@@ -55,22 +55,6 @@ Used Transfer Learning on EfficientNetB7 model along with a custom dataset combi
    
 ## Requirements
 
-
-Please install the following requirements before proceeding with the next steps
-#### Server
-
-```bash
-Docker
-```
-
-```
-
-
-
-## Run Locally
-
-
-
 ### Server
 
 Pull the server image from DockerHub
