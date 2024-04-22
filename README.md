@@ -12,7 +12,7 @@ Our solution tries to bridge the knowledge gap between a teacher and a student i
 
 ## Tech Stack
 
-**Client:** Tailwind CSS, Typescript, Next.js
+**Client:** Tailwind CSS, TypeScript, Next.js
 
 **Backend:** Flask, Python, Langchain, TF-Keras, GeminiPro and GeminiProVision API, Whisper API, HuggingFace Open-Source Models (EmotionLLM), MTCNN, Next.js, TypeScript
 
