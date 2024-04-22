@@ -62,11 +62,6 @@ Please install the following requirements before proceeding with the next steps
 ```bash
 Docker
 ```
-#### Database
-Create an environment variable DATABASE_URL in the .env file for the database to work. 
-
-```bash
-DATABASE_URL="postgresql://swataswayamdash:Dcnhf1IajsW5@ep-gentle-math-a5z04t41.us-east-2.aws.neon.tech/Insight-Ed?sslmode=require"
 
 ```
 
