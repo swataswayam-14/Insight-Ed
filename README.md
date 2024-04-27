@@ -94,7 +94,7 @@ Go to the project directory
 Create an environment variable 'GOOGLE_API_KEY' in the .env file for GeminiPro to work
 
 ```bash
-  GOOGLE_API_KEY=<YOUR_API_KEY>
+  GOOGLE_API_KEY = "AIzaSyAJsslmj9TRFRYo8zmtDY8pulFsuAuXMuc"
 ```
 
 
