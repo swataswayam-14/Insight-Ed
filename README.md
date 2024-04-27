@@ -14,7 +14,7 @@ Our solution tries to bridge the knowledge gap between a teacher and a student i
 
 **Client:** Tailwind CSS, TypeScript, Next.js
 
-**Backend:** Flask, Python, Langchain, TF-Keras, GeminiPro and GeminiProVision API, Whisper API, HuggingFace Open-Source Models (EmotionLLM), MTCNN, Next.js, TypeScript
+**Backend:** Flask, Python, Langchain,  GeminiPro and GeminiProVision API, OpenAI Whisper API, HuggingFace Open-Source Models (EmotionLLM), MTCNN, Next.js, TypeScript
 
 **Storage:** PostgreSQL, ChromaDB
 
