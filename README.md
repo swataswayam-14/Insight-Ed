@@ -31,9 +31,9 @@ Used Transfer Learning on EfficientNetB7 model along with a custom dataset combi
 -> Through the power of Gemini-Pro SDK and OpenAI Whisper module, each of the segments where the loss of interest is detected is transcribed into text and the most relevant keywords(Topic Modelling) are done to bring out the topics where students need clarification.
 -> The teacher is thus present with an analysis as to when the student lost his/her attention and on which topic(s) through the video lecture
 
-3. **Automatic Video Time-stamping into Different Topics- Saving Teacher's Time**
+3. **Generation of Different Topics on specified time intervals- Saving Teacher's Time**
 
--> This feature allows automatic time stamping of videos depending on a hyperparameter chosen by the teacher exclusively.
+-> This feature allows automatic Generation of Different Topics-Topic Modelling depending on a hyperparameter(time interval) chosen by the teacher exclusively.
 
 4. **Reverse Video Search**
 
