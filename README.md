@@ -63,6 +63,15 @@ Pull the server image from DockerHub
   docker pull yuvrajsingh9886/insight-ed-server:v1.0
 ```
 
+### Database SetUp
+
+Create an environment variable 'DATABASE_URL' in the .env file for the database to work
+
+```bash
+  DATABASE_URL="postgresql://swataswayamdash:Dcnhf1IajsW5@ep-gentle-math-a5z04t41.us-east-2.aws.neon.tech/Insight-Ed?sslmode=require"
+```
+
+
 Run the server image
 
 ```bash
