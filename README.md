@@ -8,6 +8,9 @@ Our solution tries to bridge the knowledge gap between a teacher and a student i
 
 ![logo-32](https://github.com/YuvrajSingh-mist/Insight-Ed/assets/141050962/c32ab628-141b-4439-814e-65002f504a5f)
 
+#### Overview of all [ENDPOINTS]
+[ENDPOINT.pdf](https://github.com/YuvrajSingh-mist/Insight-Ed/files/15175072/ENDPOINT.pdf)
+
 
 
 ## Tech Stack
@@ -55,6 +58,13 @@ Used Transfer Learning on EfficientNetB7 model along with a custom dataset combi
    
 ## Requirements
 
+
+```bash
+Docker for Desktop
+```
+
+## Testing
+
 ### Server
 
 Pull the server image from DockerHub
@@ -63,12 +73,19 @@ Pull the server image from DockerHub
   docker pull yuvrajsingh9886/insight-ed-server:v1.0
 ```
 
-### Database SetUp
+### Database Setup
 
 Create an environment variable 'DATABASE_URL' in the .env file for the database to work
 
 ```bash
   DATABASE_URL="postgresql://swataswayamdash:Dcnhf1IajsW5@ep-gentle-math-a5z04t41.us-east-2.aws.neon.tech/Insight-Ed?sslmode=require"
+```
+###Gemini Setup
+
+Create an environment variable 'GOOGLE_API_KEY' in the .env file for GeminiPro to work
+
+```bash
+  GOOGLE_API_KEY = "AIzaSyAJsslmj9TRFRYo8zmtDY8pulFsuAuXMuc"
 ```
 
 
@@ -76,6 +93,11 @@ Run the server image
 
 ```bash
   docker container run -d -p 8080:8080  yuvrajsingh9886/insight-ed-server:v1.0
+```
+
+[BACKEND TESTING] Use the following url for server testing-
+```bash
+http://146.190.9.102:8080/
 ```
 
 ### Website
@@ -90,11 +112,6 @@ Go to the project directory
 
 ```bash
   cd Insight-Ed
-```
-Create an environment variable 'GOOGLE_API_KEY' in the .env file for GeminiPro to work
-
-```bash
-  GOOGLE_API_KEY = "AIzaSyAJsslmj9TRFRYo8zmtDY8pulFsuAuXMuc"
 ```
 
 
