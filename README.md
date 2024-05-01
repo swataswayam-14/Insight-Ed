@@ -8,7 +8,7 @@ Our solution tries to bridge the knowledge gap between a teacher and a student i
 
 ![logo-32](https://github.com/YuvrajSingh-mist/Insight-Ed/assets/141050962/c32ab628-141b-4439-814e-65002f504a5f)
 
-## Overview of all [ENDPOINTS]
+#### Overview of all [ENDPOINTS]
 [ENDPOINT.pdf](https://github.com/YuvrajSingh-mist/Insight-Ed/files/15175072/ENDPOINT.pdf)
 
 
