@@ -80,12 +80,12 @@ Create an environment variable 'DATABASE_URL' in the .env file for the database 
 ```bash
   DATABASE_URL="postgresql://swataswayamdash:Dcnhf1IajsW5@ep-gentle-math-a5z04t41.us-east-2.aws.neon.tech/Insight-Ed?sslmode=require"
 ```
-###Gemini Setup
+### Gemini Setup
 
 Create an environment variable 'GOOGLE_API_KEY' in the .env file for GeminiPro to work
 
 ```bash
-  GOOGLE_API_KEY = "AIzaSyAJsslmj9TRFRYo8zmtDY8pulFsuAuXMuc"
+  GOOGLE_API_KEY = "YOUR_SECRET_KEY"
 ```
 
 
@@ -93,11 +93,6 @@ Run the server image
 
 ```bash
   docker container run -d -p 8080:8080  yuvrajsingh9886/insight-ed-server:v1.0
-```
-
-[BACKEND TESTING] Use the following url for server testing-
-```bash
-http://146.190.9.102:8080/
 ```
 
 ### Website
