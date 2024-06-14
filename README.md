@@ -58,11 +58,9 @@ Used Transfer Learning on EfficientNetB7 model along with a custom dataset combi
    
 ## Requirements
 
-
 ```bash
 Docker for Desktop
 ```
-
 ## Testing
 
 ### Server
@@ -72,7 +70,6 @@ Pull the server image from DockerHub
 ```bash
   docker pull yuvrajsingh9886/insight-ed-server:v1.0
 ```
-
 ### Database Setup
 
 Create an environment variable 'DATABASE_URL' in the .env file for the database to work
@@ -108,7 +105,6 @@ Go to the project directory
 ```bash
   cd Insight-Ed
 ```
-
 
 
 ## License
