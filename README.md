@@ -5,7 +5,6 @@ Our product (**website**) provides a solution to tackle the challenge of distanc
 
 Our solution tries to bridge the knowledge gap between a teacher and a student in online classes by leveraging the power of AI to provide the teacher and student with insights to better prepare themselves for the course/lecture, leading to our solution - *Insight-Ed*.
 
-
 ![logo-32](https://github.com/YuvrajSingh-mist/Insight-Ed/assets/141050962/c32ab628-141b-4439-814e-65002f504a5f)
 
 #### Overview of all [ENDPOINTS]
